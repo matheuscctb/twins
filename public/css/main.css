@@ -1,6 +1,7 @@
 ﻿html, body {
     min-height: 100%;
     height: 100%;
+    margin: 0;
 }
 
 .fill {
@@ -20,6 +21,23 @@ body {
 
 #forgeViewer {
     width: 100%;
+    height: 500px;
+    margin: 0;
+    background-color: #F0F8FF;
+}
+
+td {
+    color: #c8cbcf;
+}
+
+/*nestedViewer*/
+#nestedViewerExtensionButton {
+    background-image: url(https://img.icons8.com/color/64/000000/picture-in-picture.png);
+    background-image: url(https://raw.githubusercontent.com/encharm/Font-Awesome-SVG-PNG/master/white/png/24/object-group.png);
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: grayscale(100%);
 }
 
 /*Panelinfo*/
@@ -30,4 +48,22 @@ body {
     background-position: center;
     filter: grayscale(100%);
 }
-/*Panelinfo*/
+
+.ManutencaoViewerExtensionIcon {
+    background-image: url(https://raw.githubusercontent.com/encharm/Font-Awesome-SVG-PNG/master/white/png/24/briefcase.png);
+    background-size: 24px;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: grayscale(100%);
+}
+
+#nestedViewerExtensionButton.active {
+    filter: none;
+}
+
+#nestedViewerExtensionDropdown {
+    background: #eee;
+    color: #333;
+}
+
+/*nestedViewer*/

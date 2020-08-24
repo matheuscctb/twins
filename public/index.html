@@ -10,12 +10,9 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
-    <title>Logtracking3D</title>
+    <title>SMART TWINS 4.0</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-    <!--    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"-->
-    <!--            integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"-->
-    <!--            crossorigin="anonymous"></script>-->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
             integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
             crossorigin="anonymous"></script>
@@ -32,28 +29,14 @@
     <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
 
     <style>
-        body {
-            margin: 0;
-        }
 
-        #forgeViewer {
-            width: 100%;
-            height: 500px;
-            margin: 0;
-            background-color: #F0F8FF;
-        }
-        td{
-            color: #c8cbcf;
-        }
     </style>
     <!-- this project files -->
     <link href="css/main.css" rel="stylesheet"/>
-    <!--    <script src="js/ForgeTree.js"></script>-->
-    <!--    <script src="js/ForgeViewer.js"></script>-->
 </head>
 <body class="__web-inspector-hide-shortcut__">
-<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0 shadow">
-    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">Logtracking3D</a>
+<nav class="navbar navbar-dark bg-primary fixed-top bg-primary flex-md-nowrap p-0 shadow">
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#">SMART TWINS 4.0</a>
 
 
     <ul class="navbar-nav px-3">
@@ -62,107 +45,37 @@
         </li>
     </ul>
 </nav>
-
-<div class="container-fluid">
-    <div class="row">
-        <nav class="col-md-2 d-none d-md-block bg-light sidebar">
-            <div class="sidebar-sticky" style="margin-top: 51px;">
-                <div class=" ">
-                    <div class="panel-heading ">
-                        <label for="obras"><h5>Selecione uma Obra</h5></label>
-                        <select class="form-control" id="obras">
-                        </select>
-                    </div>
-                </div>
-                <br>
-                <div class="w3-bar-block">
-                    <div class="w3-container">
-                        <h5>Módulo de Cadastro</h5>
-                    </div>
-                    <div class="w3-bar-block">
-                        <a href="#" class="w3-bar-item w3-button w3-padding">Cadastrar Obra</a>
-                        <br>
-                        <a href="#" class="w3-bar-item w3-button w3-padding">Cadastrar Peça</a>
-                        <br>
-                        <a href="#" class="w3-bar-item w3-button w3-padding">Cadastrar Veículo</a>
-                    </div>
-
-
-                    <br>
-                    <h5>Relatórios</h5>
-                    <br>
-
-                    <div class="w3-bar-block">
-                        <div class="w3-container">
-                            <h6>Acompanhar Fabricação</h6>
-                        </div>
-                        <div class="w3-bar-block">
-                            <a href="#" class="w3-bar-item w3-button w3-padding">Relatório de
-                                Inspeção e Qualidade</a>
-                            <br>
-                            <a href="#" class="w3-bar-item w3-button w3-padding">Estoque de Peças
-                                Liberadas</a>
-                        </div>
-                        <br>
-
-                        <div class="w3-container">
-                            <h6>Acompanhar Transporte</h6>
-                        </div>
-                        <div class="w3-bar-block">
-                            <a href="#" class="w3-bar-item w3-button w3-padding">Relatório de
-                                Entrega</a>
-                        </div>
-                        <br>
-
-                        <div class="w3-container">
-                            <h6>Acompanhar Montagem</h6>
-                        </div>
-                        <div class="w3-bar-block">
-                            <a href="#" class="w3-bar-item w3-button w3-padding">
-                                Relatório de Peças Montadas </a>
-                            <br>
-                            <a href="#" class="w3-bar-item w3-button w3-padding">Estoque de Peças
-                                em Obra</a>
-                        </div>
-
-                    </div>
-
-
-                </div>
-            </div>
-        </nav>
-
-        <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style="margin-top: 31px;">
-            <div class="chartjs-size-monitor"
-                 style=" position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
-                <div class="chartjs-size-monitor-expand"
-                     style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                    <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
-                </div>
-                <div class="chartjs-size-monitor-shrink"
-                     style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
-                    <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
-                </div>
-            </div>
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                <h1 class="h2">Minha Obra</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-
-                </div>
-            </div>
-
-            <div id="forgeViewer" class="col-xs-12 col-md-8"></div>
-
-        </main>
+<div class=" col-md-3 ml-sm-auto col-lg-3 px-4">
+    <div class="panel-heading ">
+        <label for="obras"><h5>Selecione uma Obra</h5></label>
+        <select class="form-control" id="obras">
+        </select>
     </div>
 </div>
+<main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" style="margin-top: 31px;">
+    <div class="chartjs-size-monitor"
+         style=" position: absolute; left: 0px; top: 0px; right: 0px; bottom: 0px; overflow: hidden; pointer-events: none; visibility: hidden; z-index: -1;">
+        <div class="chartjs-size-monitor-expand"
+             style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+            <div style="position:absolute;width:1000000px;height:1000000px;left:0;top:0"></div>
+        </div>
+        <div class="chartjs-size-monitor-shrink"
+             style="position:absolute;left:0;top:0;right:0;bottom:0;overflow:hidden;pointer-events:none;visibility:hidden;z-index:-1;">
+            <div style="position:absolute;width:200%;height:200%;left:0; top:0"></div>
+        </div>
+    </div>
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+        <h1 class="h2">Minha Obra</h1>
+        <div class="btn-toolbar mb-2 mb-md-0">
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"-->
-<!--        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"-->
-<!--        crossorigin="anonymous"></script>-->
+        </div>
+    </div>
+
+    <div id="forgeViewer" class="col-xs-12 col-md-8"></div>
+
+</main>
+</div>
+</div>
 
 
 <!-- Icons -->
@@ -171,13 +84,15 @@
     feather.replace()
 </script>
 <!--Firebase-->
-<script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-database.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.18.0/firebase-storage.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-database.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.19.0/firebase-storage.js"></script>
 <!--Firebase-->
 <!--Extension-->
 <script src="js/PanelInfoViewerExtension.js"></script>
+<script src="js/ManutencaoViewerExtension.js"></script>
+<script src="js/NestedViewerExtension.js"></script>
 
 
 <script>
@@ -193,10 +108,10 @@
     // };
 
     Autodesk.Viewing.Initializer(options, function () {
-        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {extensions: ['PanelInfoViewerExtension',]});
+        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {extensions: ['PanelInfoViewerExtension', 'ManutencaoViewerExtension']});
         viewer.start();
 
-        var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dnZ4Z2NlYWM0emVhYjFvejY4b25wOGZhMXZqanlyanYtZGVmZXNhX21lc3RyYWRvX2ZpbmFsL0dhbHAlQzMlQTNvJTIwLSUyMFRlc3RlJTIwMDIucnZ0';
+        var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6eHM2ZTdnNHF3dWlrYnp6YXAxcnQ5eG1ubXFqZjRpOW0tZGVmZXNhX21lc3RyYWRvL1NOUl9IQUJfRklYJTIwKDMpLnJ2dA==';
 
         // var documentId = 'urn:' + urn;
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
@@ -208,6 +123,8 @@
         viewer.loadDocumentNode(doc, viewables).then(i => {
             // documented loaded, any action?
         });
+        viewer.loadExtension("NestedViewerExtension", {filter: ["2d", "3d"], crossSelection: true})
+
     }
 
     function onDocumentLoadFailure(viewerErrorCode) {
@@ -223,70 +140,24 @@
     }
 
 
-
 </script>
 <script>
-    $('#exampleModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button that triggered the modal
-        var recipient = button.data('whatever') // Extract info from data-* attributes
-        // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-        // Update the modal's content. We'll use jQuery here, but you could use a data binding library or other methods instead.
-        var modal = $(this)
-        modal.find('.modal-title').text(recipient)
-        // modal.find('.modal-body input').val(recipient)
-        modal.find('.modal-body ').val(recipient)
-    })
-    $('#myTabs a').click(function (e) {
-        e.preventDefault()
-        $(this).tab('show')
-    })
-
-    $("#h-viga").blur(function () {
-        this.value = parseFloat(this.value).toFixed(2);
-    });
-    $("#b-viga").blur(function () {
-        this.value = parseFloat(this.value).toFixed(2);
-    });
-    $("#bw-viga").blur(function () {
-        this.value = parseFloat(this.value).toFixed(2);
-    });
-    $("#comp-viga").blur(function () {
-        this.value = parseFloat(this.value).toFixed(2);
-    });
-    $("#deformacao-viga").blur(function () {
-        this.value = parseFloat(this.value).toFixed(2);
-    });
-    $("#icamento-viga").blur(function () {
-        this.value = parseFloat(this.value).toFixed(2);
-    });
-    $("#volume-vifa").blur(function () {
-        this.value = parseFloat(this.value).toFixed(2);
-    });
-    $("#peso-viga").blur(function () {
-        this.value = parseFloat(this.value).toFixed(2);
-    });
-    // $('#myTabs a[href="#profile"]').tab('show') // Select tab by name
-    // $('#myTabs a:first').tab('show') // Select first tab
-    // $('#myTabs a:last').tab('show') // Select last tab
-    // $('#myTabs li:eq(2) a').tab('show') // Select third tab (0-indexed)
-    // $('#myModal').on('shown.bs.modal', function () {
-    //     $('#myInput').focus()
-    // })
     // Your web app's Firebase configuration
     var firebaseConfig = {
-        apiKey: "AIzaSyADC3lm8Du9Vg0l-7CllsX8RcROu9Y0EhU",
-        authDomain: "caio-bcff8.firebaseapp.com",
-        databaseURL: "https://caio-bcff8.firebaseio.com",
-        projectId: "caio-bcff8",
-        storageBucket: "caio-bcff8.appspot.com",
-        messagingSenderId: "586480812971",
-        appId: "1:586480812971:web:f95ba106a810410c7548ee"
+        apiKey: "AIzaSyCk_aoscgy9uwGQJ3OfEcBulfttjH2Mzxw",
+        authDomain: "carol-56175.firebaseapp.com",
+        databaseURL: "https://carol-56175.firebaseio.com",
+        projectId: "carol-56175",
+        storageBucket: "carol-56175.appspot.com",
+        messagingSenderId: "497363212618",
+        appId: "1:497363212618:web:39701f8718c372bcbc09b3",
+        measurementId: "G-9TE9525H3C"
     };
     // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     // firebase.analytics();
 
-    firebase.database().ref('obras/').once('value', function (snapshot) {
+    firebase.database().ref('obras/Alphaville/sequenciareal').once('value', function (snapshot) {
         var i = 0;
         snapshot.forEach(function (item) {
             var select = document.getElementById("obras");
@@ -294,7 +165,6 @@
             opt_txt = document.createTextNode(item.key);
             options.appendChild(opt_txt);
             options.setAttribute("value", item.key);
-            // options.setAttribute("text", opt_txt);
             select.appendChild(options);
             i++;
         });
