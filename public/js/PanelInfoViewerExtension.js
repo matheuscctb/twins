@@ -1,0 +1,305 @@
+class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
+    constructor(viewer, options) {
+        super(viewer, options);
+        this._group = null;
+        this._button = null;
+    }
+
+    load() {
+        console.log('PanelInfoViewerExtensions has been loaded');
+        return true;
+    }
+
+    unload() {
+        // Clean our UI elements if we added any
+        if (this._group) {
+            this._group.removeControl(this._button);
+            if (this._group.getNumberOfControls() === 0) {
+                this.viewer.toolbar.removeControl(this._group);
+            }
+        }
+        console.log('PanelInfoViewerExtensions has been unloaded');
+        return true;
+    }
+
+    onToolbarCreated() {
+        // Create a new toolbar group if it doesn't exist
+        this._group = this.viewer.toolbar.getControl('nestedViewerExtensionToolbar');
+        if (!this._group) {
+            this._group = new Autodesk.Viewing.UI.ControlGroup('nestedViewerExtensionToolbar');
+            this.viewer.toolbar.addControl(this._group);
+        }
+        var mypanel = null;
+        // Add a new button to the toolbar group
+        this._button = new Autodesk.Viewing.UI.Button('PanelInfoViewerExtensionButton');
+        this._button.onClick = (ev) => {
+
+            if (mypanel != null) {
+                //NOP_VIEWER.container.removeChild( mypanel.container );
+                mypanel.uninitialize();
+                mypanel = null;
+                this._button.removeClass('active');
+
+            }
+
+            var content = document.createElement('div');
+            mypanel = new SimplePanel(NOP_VIEWER.container, 'mypanel', 'Dashboard', content, 20, 20);
+            mypanel.setVisible(true);
+            this._button.addClass('active');
+
+        };
+        this._button.setToolTip('Informações das Formas');
+        this._button.addClass('PanelInfoViewerExtensionIcon');
+        this._group.addControl(this._button);
+    }
+}
+
+Autodesk.Viewing.theExtensionManager.registerExtension('PanelInfoViewerExtension', PanelInfoViewerExtension);
+
+
+SimplePanel = function (parentContainer, id, title, content, x, y) {
+    this.content = content;
+    Autodesk.Viewing.UI.DockingPanel.call(this, parentContainer, id, title, '');
+
+    // Auto-fit to the content and don't allow resize.  Position at the coordinates given.
+    //
+    this.container.style.height = "auto";
+    // this.container.style.width = "auto";
+    this.container.style.width = "450px";
+    this.container.style.resize = "auto";
+    this.container.style.left = x + "px";
+    this.container.style.top = y + "px";
+    this.container.style.zIndex = 2;
+
+};
+
+SimplePanel.prototype = Object.create(Autodesk.Viewing.UI.DockingPanel.prototype);
+SimplePanel.prototype.constructor = SimplePanel;
+
+SimplePanel.prototype.initialize = function () {
+    this.title = this.createTitleBar(this.titleLabel || this.container.id);
+    this.container.appendChild(this.title);
+
+    this.container.appendChild(this.content);
+    this.initializeMoveHandlers(this.container);
+
+    this.closer = document.createElement("span");
+    this.closer = this.createCloseButton();
+    this.initializeCloseHandler(this.closer);
+    this.container.appendChild(this.closer);
+
+    var op = {left: false, heightAdjustment: 100, marginTop: 0};
+    this.scrollcontainer = this.createScrollContainer(op);
+
+    // var selection = viewer.getSelection();
+    // Get current selection
+    const selection = viewer.getSelection();
+    // viewer.clearSelection();
+
+    var numRfid = null;
+    var numForma = null;
+    var nome = null;
+    var caracteristicas = null;
+    var dados = getInfo(selection).then((info => {
+            nome = info[0];
+            if (!nome) {
+                var html = [
+                    '<div class="uicomponent-panel-controls-container">',
+                    '<div class="">',
+                    '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
+                    '<tbody>',
+                    '<tr><td>Sem informações disponíveis no momento.</td></tr>',
+                    '</tbody>',
+                    '</table>',
+                    '</div>',
+                    '</div>'
+                ].join('\n');
+                $(this.scrollContainer).append(html);
+
+                this.initializeMoveHandlers(this.title);
+            }
+            var rfid = getRfid(nome).then((info => {
+                numRfid = info;
+                if (!numRfid) {
+                    var html = [
+                        '<div class="uicomponent-panel-controls-container">',
+                        '<div class="">',
+                        '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
+                        '<tbody>',
+                        '<tr><td>Sem informações disponíveis no momento.</td></tr>',
+                        '</tbody>',
+                        '</table>',
+                        '</div>',
+                        '</div>'
+                    ].join('\n');
+                    $(this.scrollContainer).append(html);
+
+                    this.initializeMoveHandlers(this.title);
+                }
+                var objeto = getCaracteristicas(numRfid, nome).then((objCaracteristicas => {
+
+
+                        caracteristicas = {
+                            nome: objCaracteristicas.nome,
+                            comp: objCaracteristicas.comp,
+                            secao: objCaracteristicas.secao,
+                            largura: objCaracteristicas.largura,
+                        }
+                        if (!dados || !numRfid || !caracteristicas) {
+                            html = [
+                                '<div class="uicomponent-panel-controls-container">',
+                                '<div class="">',
+                                '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
+                                '<tbody>',
+                                '<tr><td>Sem informações disponíveis no momento.</td></tr>',
+                                '</tbody>',
+                                '</table>',
+                                '</div>',
+                                '</div>'
+                            ].join('\n');
+                        } else {
+                            var html = [
+                                '<div class="uicomponent-panel-controls-container">',
+                                '<div class="">',
+                                '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
+                                '<tbody>',
+                                '<tr><td>Peça</td><td> ' + caracteristicas.nome + '</td></tr>',
+                                '<tr><td>Progresso Produção</td><td><div class="progress">  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div></td></tr>',
+                                '<tr><td>Progresso Transporte</td><td><div class="progress">  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div></td></tr>',
+                                '<tr><td>ID</td><td>' + selection + '</td></tr>',
+                                '<tr><td>Nº RFID</td><td>' + numRfid + '</td></tr>',
+                                '<tr><td>Comprimento</td><td>' + caracteristicas.comp + '</td></tr>',
+                                '<tr><td>Seção</td><td>' + caracteristicas.secao + '</td></tr>',
+                                // '<tr><td>Peso</td><td>' + caracteristicas.peso + '</td></tr>',
+                                // '<tr><td>Ultimo Registro de Defeito</td><td>' + caracteristicas.dataUltimoDefeito + '</td></tr>',
+                                // '<tr><td>Defeito</td><td>' + caracteristicas.descUltimoDefeito + '</td></tr>',
+                                // '<tr><td>Ultimo Registro de Manutenção</td><td>' + caracteristicas.dataUltimaManutencao + '</td></tr>',
+                                // '<tr><td>Manutenção</td><td>' + caracteristicas.descUltimaManutencao + '</td></tr>',
+                                '</tbody>',
+                                '</table>',
+                                '</div>',
+                                '</div>'
+                            ].join('\n');
+                        }
+
+                        $(this.scrollContainer).append(html);
+
+                        this.initializeMoveHandlers(this.title);
+                    }
+                ))
+            }));
+        })
+        // .catch((error) => console.error('ERR! Houve um erro! ->', error));
+    );
+
+
+    // .catch((error) => console.error('ERR! Houve um erro! ->', error));
+
+
+};
+
+function getAllLeafComponents(viewer, callback) {
+    var cbCount = 0; // count pending callbacks
+    var components = []; // store the results
+    var tree; // the instance tree
+
+    function getLeafComponentsRec(parent) {
+        cbCount++;
+        if (tree.getChildCount(parent) != 0) {
+            tree.enumNodeChildren(parent, function (children) {
+                getLeafComponentsRec(children);
+            }, false);
+        } else {
+            components.push(parent);
+        }
+        if (--cbCount == 0) callback(components);
+    }
+
+    viewer.getObjectTree(function (objectTree) {
+        tree = objectTree;
+        var allLeafComponents = getLeafComponentsRec(tree.getRootId());
+    });
+}
+
+async function getNome(selection) {
+    return new Promise(function (resolve) {
+        if (selection) {
+            getAllLeafComponents(viewer, (dbIds) => {
+                dbIds.forEach((dbId) => {
+                    if (dbId == selection) {
+                        viewer.getProperties(dbId, (props) => {
+                            for (let elemento of props.properties) {
+                                if (elemento.displayName == "Elemento") {
+                                    var nome = elemento.displayValue;
+                                    resolve(nome);
+                                }
+                            }
+                        })
+                    }
+
+                })
+            })
+        }
+    })
+}
+
+async function getInfo(selection) {
+    let info = [await getNome(selection)];
+    return info;
+}
+
+function getInfoRfid(nome) {
+    return new Promise(function (resolve) {
+        switch (nome.substr(0, 1)) {
+            case 'V':
+                var estrutura = 'vigas';
+            case 'P':
+                var estrutura = 'pilares';
+        }
+        if (nome && estrutura) {
+            var obra = document.getElementById('obras').value;
+            firebase.database().ref('precadastro/' + obra + '/estrutura/' + estrutura + '/' + nome + '/').once('value').then(snapshot => {
+                var rfId = snapshot.child('cadastro').child("tag").val();
+                resolve(rfId);
+            });
+        }
+
+    });
+}
+
+async function getRfid(nome) {
+    let numRfid = await getInfoRfid(nome);
+    return numRfid;
+}
+
+function getInfoRfidFirebase(numRfid, nome) {
+    return new Promise(function (resolve) {
+        if (nome && numRfid) {
+            switch (nome.substr(0, 1)) {
+                case 'V':
+                    var estrutura = 'vigas/';
+                case 'P':
+                    var estrutura = 'pilares/';
+            }
+            var obra = document.getElementById('obras').value;
+            firebase.database().ref('obras/' + obra + '/estrutura/' + estrutura).once('value').then(snapshot => {
+                    var obj = snapshot.child(numRfid).val();
+                    var caracteristicas = {
+                        nome: obj.peca,
+                        comp: obj.comp,
+                        secao: obj.secao,
+                        largura: obj.largura,
+                    }
+                    resolve(caracteristicas);
+                }
+            )
+            ;
+        }
+
+    });
+}
+
+async function getCaracteristicas(numRfid, nome) {
+    let objCaracteristicas = await getInfoRfidFirebase(numRfid, nome);
+    return objCaracteristicas;
+}
