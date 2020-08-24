@@ -18,7 +18,13 @@
 
 const path = require('path');
 const express = require('express');
+// Firebase App (the core Firebase SDK) is always required and
+// must be listed before other Firebase SDKs
+var firebase = require("firebase/app");
 
+// Add the Firebase products that you want to use
+require("firebase/auth");
+require("firebase/firestore");
 const PORT = process.env.PORT || 3000;
 const config = require('./config');
 if (config.credentials.client_id == null || config.credentials.client_secret == null) {

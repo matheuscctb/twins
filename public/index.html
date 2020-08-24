@@ -38,9 +38,12 @@
 
         #forgeViewer {
             width: 100%;
-            height: 100%;
+            height: 500px;
             margin: 0;
             background-color: #F0F8FF;
+        }
+        td{
+            color: #c8cbcf;
         }
     </style>
     <!-- this project files -->
@@ -148,7 +151,7 @@
                 </div>
             </div>
 
-            <div id="forgeViewer"></div>
+            <div id="forgeViewer" class="col-xs-12 col-md-8"></div>
 
         </main>
     </div>
@@ -213,21 +216,13 @@
 
     function getForgeToken(callback) {
         fetch('/api/forge/oauth/token').then(res => {
-            console.log(res
-            )
             res.json().then(data => {
                 callback(data.access_token, data.expires_in);
             });
         });
     }
-    // function getForgeToken(callback) {
-    //     jQuery.ajax({
-    //         url: '/api/forge/oauth/public',
-    //         success: function (res) {
-    //             callback(res.access_token, res.expires_in);
-    //         }
-    //     });
-    // }
+
+
 
 </script>
 <script>

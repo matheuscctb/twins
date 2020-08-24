@@ -11,6 +11,7 @@
     "axios": "^0.20.0",
     "bootstrap": "^4.5.2",
     "express": "^4.17.1",
+    "firebase": "^7.19.0",
     "forge-apis": "^0.7.3",
     "jquery": "^3.5.1",
     "multer": "^1.4.2",
