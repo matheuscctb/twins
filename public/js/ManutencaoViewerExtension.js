@@ -40,40 +40,38 @@ class ManutencaoViewerExtension extends Autodesk.Viewing.Extension {
             var vetorTodosElementos = [];
             //encontra todos os dbIds da visualização
             getAllLeafComponents(viewer, (dbIds) => {
-                    //Propriedade que quero buscar das formas
-                    const filteredProps = ['Numeração das formas', "Agrupamentos"];
-                    // Get only the properties we need for the leaf dbIds
-                    this.viewer.model.getBulkProperties(dbIds, filteredProps, (items) => {
-                        // Iterate through the elements we found
-                        items.forEach((item) => {
-                            // and iterate through each property
-                            item.properties.forEach(function (prop) {
-                                if (prop.displayValue) {
-                                    vetorTodosElementos.push(item);
-                                }
-                            });
-                        });
-                        //Seleciono todas as formas com informações de agrupamentos e numeração
-                        var formas = []
-                        vetorTodosElementos.forEach((value) => {
-                            if (value.properties[0].displayValue && value.properties[1].displayValue) {
-                                formas.push(value);
+                //Propriedade que quero buscar das formas
+                const filteredProps = ['Numeração', "Agrupamento"];
+                // Get only the properties we need for the leaf dbIds
+                this.viewer.model.getBulkProperties(dbIds, filteredProps, (items) => {
+                    // Iterate through the elements we found
+                    items.forEach((item) => {
+                        // and iterate through each property
+                        item.properties.forEach(function (prop) {
+                            if (prop.displayValue) {
+                                vetorTodosElementos.push(item);
                             }
-                        })
-                        //As formas acabaram duplicadas, aqui acontece a separação
-                        const formasFinal = [...new Set(formas)];
-
-                        //Localizar RFID com a data da leitura no Firebase
-                        const x = getInfoLeituras(formasFinal)
-                            .then(
-                                res => {
-                                    getHistorico(res).then(response => {
-                                        console.log(response)
-                                    })
-                                })
+                        });
                     });
-                }
-            );
+                    //Seleciono todas as formas com informações de agrupamentos e numeração
+                    var formas = []
+                    vetorTodosElementos.forEach((value) => {
+                        if (value.properties[0].displayValue && value.properties[1].displayValue) {
+                            formas.push(value);
+                        }
+                    })
+                    //As formas acabaram duplicadas, aqui acontece a separação
+                    var formasFinal = [...new Set(formas)];
+                    //Localizar RFID com a data da leitura no Firebase
+                    const x = getInfoLeituras(formasFinal)
+                        .then(
+                            res => {
+                                getHistorico(res).then(response => {
+                                    console.log('FIM')
+                                })
+                            })
+                });
+            });
         };
         this._button.setToolTip('Manuntenção & Defeito');
         this._button.addClass('ManutencaoViewerExtensionIcon');
@@ -85,8 +83,9 @@ Autodesk.Viewing.theExtensionManager.registerExtension('ManutencaoViewerExtensio
 
 async function getRfidAndData(data) {
     for (const value of data) {
-        let agrupamento = value.properties[0].displayValue;
-        let numero = value.properties[1].displayValue;
+        var agrupamento = value.properties[1].displayValue;
+        var numero = value.properties[0].displayValue;
+
         await getInfoRfidDataFirebase(agrupamento, numero).then(response => {
             if (response[0] && response[1]) {
                 value.properties[2] = {displayName: "rfid", displayValue: response[0]};
@@ -109,7 +108,8 @@ function getInfoRfidDataFirebase(agrupamento, numero) {
     return new Promise(resolve => {
         if (agrupamento && numero) {
             var obra = document.getElementById('obras').value;
-            firebase.database().ref('obras/Alphaville/sequenciareal/' + obra + '/0' + agrupamento).once('value').then(snapshot => {
+            var bloco = document.getElementById('bloco').value;
+            firebase.database().ref('obras/'+obra+'/sequenciareal/' + bloco + '/0' + agrupamento).once('value').then(snapshot => {
                 var rfId = snapshot.child(numero).child("codRfid").val();
                 var data = snapshot.child(numero).child("data").val();
                 if (rfId && data) {
@@ -139,6 +139,7 @@ async function getHistoricoFormas(data) {
                 value.properties[5] = {displayName: "manutencaoData", displayValue: response[0]};
             })
             //se só tiver data deifeito
+
             //Cor vermelha
             if (value.properties[4].displayValue && value.properties[5].displayValue == null) {
                 viewer.setThemingColor(value.dbId, new THREE.Vector4(1, 0, 0, 1));
@@ -154,23 +155,8 @@ async function getHistoricoFormas(data) {
                 viewer.setThemingColor(value.dbId, new THREE.Vector4(0, 1, 0, 1));
             }
 
-            // await getHistoricoFormasFirebase(rfid,data).then(response => {
-            //         if (response[0] && response[1]) {
-            //             console.log('info')
-            //
-            //             console.log(response[0]);
-            //             console.log(response[1]);
-            //             // value.properties[4] = {displayName: "defeito", displayValue: response[0]};
-            //             // value.properties[5] = {displayName: "defeitoData", displayValue: response[0]};
-            //             // value.properties[4] = {displayName: "manutencao", displayValue: response[0]};
-            //             // value.properties[5] = {displayName: "manutencaoData", displayValue: response[0]};
-            //         }
-            //     })
-            // }
         } else {
-            // value.properties[4] = {displayName: "defeito", displayValue: null};
             value.properties[4] = {displayName: "defeitoData", displayValue: null};
-            // value.properties[4] = {displayName: "manutencao", displayValue: null};
             value.properties[6] = {displayName: "manutencaoData", displayValue: null};
         }
     }
@@ -186,7 +172,6 @@ function getHistoricoDefeitosFormasFirebase(rfid, data) {
             firebase.database().ref('formas/' + rfid + '/historico/defeitos').orderByKey().endAt(data).limitToLast(1).once('value').then(snapshot => {
                 var objDefeito = snapshot.val();//objeto com as informações do defeito
                 let data = Object.keys(objDefeito);//indice do vetor de objeto
-                // resolve([data,objDefeito]);
                 if (data) {
                     resolve(data);
                 } else {
@@ -204,7 +189,6 @@ function getHistoricoManutencaoFormasFirebase(rfid, data) {
             firebase.database().ref('formas/' + rfid + '/historico/manutencao').orderByKey().endAt(data).limitToLast(1).once('value').then(snapshot => {
                 var objManutencao = snapshot.val();//objeto com as informações do manutenção
                 let data = Object.keys(objManutencao);//indice do vetor de objeto
-                // resolve([data,objManutencao]);
                 if (data) {
                     resolve(data);
                 } else {
@@ -215,22 +199,3 @@ function getHistoricoManutencaoFormasFirebase(rfid, data) {
         }
     });
 }
-
-// function getHistoricoFormasFirebase(rfid,data) {
-//     return new Promise(resolve => {
-//         console.log('info')
-//         if (rfid) {
-//             firebase.database().ref('formas').once('value').then(snapshot => {
-//                 var objDefeito = snapshot.child(rfid).child('historico/defeitos').val();
-//                 var objManutencao = snapshot.child(rfid).child('historico/manutencao').val();
-//
-//                 console.log(objDefeito)
-//                 if (objDefeito && objManutencao) {
-//                     resolve([objDefeito, objManutencao])
-//                 } else {
-//                     resolve([null, null])
-//                 }
-//             });
-//         }
-//     });
-// }

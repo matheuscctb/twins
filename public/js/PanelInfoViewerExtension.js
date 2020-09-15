@@ -169,7 +169,7 @@ SimplePanel.prototype.initialize = function () {
                                 '<div class="">',
                                 '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
                                 '<tbody>',
-                                '<tr><td>Name</td><td> Forma ' + caracteristicas.nome + '</td></tr>',
+                                '<tr><td>Name</td><td> ' + caracteristicas.nome + '</td></tr>',
                                 '<tr><td>Progresso</td><td><div class="progress">  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div></td></tr>',
                                 '<tr><td>ID</td><td>' + selection + '</td></tr>',
                                 '<tr><td>Agrupamento</td><td>' + agrupamento + '</td></tr>',
@@ -235,7 +235,7 @@ async function getAgrupamento(selection) {
                     if (dbId == selection) {
                         viewer.getProperties(dbId, (props) => {
                             for (let elemento of props.properties) {
-                                if (elemento.displayName == "Agrupamentos") {
+                                if (elemento.displayName == "Agrupamento") {
                                     var agrupamento = elemento.displayValue;
                                     resolve(agrupamento);
                                 }
@@ -257,7 +257,7 @@ async function getNumero(selection) {
                     if (dbId == selection) {
                         viewer.getProperties(dbId, (props) => {
                             for (let elemento of props.properties) {
-                                if (elemento.displayName == "Numeração das formas") {
+                                if (elemento.displayName == "Numeração") {
                                     var numeroForma = elemento.displayValue;
                                     resolve(numeroForma);
                                 }
@@ -281,7 +281,8 @@ function getInfoRfid(agrupamento, numero) {
     return new Promise(function (resolve) {
         if (agrupamento && numero) {
             var obra = document.getElementById('obras').value;
-            firebase.database().ref('obras/Alphaville/sequenciareal/' + obra + '/0' + agrupamento).once('value').then(snapshot => {
+            var bloco = document.getElementById('bloco').value;
+            firebase.database().ref('obras/' + obra + '/sequenciareal/' + bloco + '/0' + agrupamento).once('value').then(snapshot => {
                 var rfId = snapshot.child(numero).child("codRfid").val();
                 resolve(rfId);
             });
@@ -300,7 +301,6 @@ function getInfoRfidFirebase(numRfid) {
         if (numRfid) {
             firebase.database().ref('formas').once('value').then(snapshot => {
                 var obj = snapshot.child(numRfid).val();
-                console.log(obj);
                 var objDefeito = snapshot.child(numRfid).child('ultimodefeito').val();
                 var objManutencao = snapshot.child(numRfid).child('ultimamanutencao').val();
                 var caracteristicas = {
