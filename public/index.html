@@ -128,7 +128,60 @@
     <script src="js/PanelInfoViewerExtension.js"></script>
     <script src="js/ManutencaoViewerExtension.js"></script>
     <script src="js/NestedViewerExtension.js"></script>
+    <script>
+        console.log("Passou por aqui")
+        var viewer;
+        var options = {
 
+            env: 'AutodeskProduction',
+            api: 'derivativeV2', // TODO: for models uploaded to EMEA change this option to 'derivativeV2_EU'
+            getAccessToken: getForgeToken
+        };
+        // var options = {
+        //     env: 'AutodeskProduction',
+        //     getAccessToken: getForgeToken
+        // };
+
+        Autodesk.Viewing.Initializer(options, function() {
+            console.log("... e aqui 1")
+            viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
+                extensions: ['PanelInfoViewerExtension']
+            });
+            viewer.start();
+
+            //var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotcjIvUHIlQzMlQTlkaW8lMjBDT1JSSUdJRE8lMjAzJTIwKDMpLnJ2dA==';
+            console.log("urn: ", urn)
+            var documentId = 'urn:' + urn;
+            Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+        });
+
+
+        function onDocumentLoadSuccess(doc) {
+            console.log("... e aqui 2")
+            var viewables = doc.getRoot().getDefaultGeometry();
+            viewer.loadDocumentNode(doc, viewables).then(i => {
+                // documented loaded, any action?
+                console.log("... e aqui 3, depois de carregado")
+
+
+            });
+
+        }
+
+        function onDocumentLoadFailure(viewerErrorCode) {
+            console.log("Passou por aqui, no erro")
+            console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
+        }
+
+        function getForgeToken(callback) {
+            console.log("Paggou pelo callback")
+            fetch('/api/forge/oauth/token').then(res => {
+                res.json().then(data => {
+                    callback(data.access_token, data.expires_in);
+                });
+            });
+        }
+    </script>
 
 
     <script>
@@ -316,59 +369,7 @@
         });
     </script>
 
-    <script>
-        console.log("Passou por aqui")
-        var viewer;
-        var options = {
-            env: 'AutodeskProduction',
-            api: 'derivativeV3', // TODO: for models uploaded to EMEA change this option to 'derivativeV2_EU'
-            getAccessToken: getForgeToken
-        };
-        // var options = {
-        //     env: 'AutodeskProduction',
-        //     getAccessToken: getForgeToken
-        // };
 
-        Autodesk.Viewing.Initializer(options, function() {
-            console.log("... e aqui 1")
-            viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
-                extensions: ['PanelInfoViewerExtension']
-            });
-            viewer.start();
-
-            //var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotcjIvUHIlQzMlQTlkaW8lMjBDT1JSSUdJRE8lMjAzJTIwKDMpLnJ2dA==';
-            console.log("urn: ", urn)
-            var documentId = 'urn:' + urn;
-            Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
-        });
-
-
-        function onDocumentLoadSuccess(doc) {
-            console.log("... e aqui 2")
-            var viewables = doc.getRoot().getDefaultGeometry();
-            viewer.loadDocumentNode(doc, viewables).then(i => {
-                // documented loaded, any action?
-                console.log("... e aqui 3, depois de carregado")
-
-
-            });
-
-        }
-
-        function onDocumentLoadFailure(viewerErrorCode) {
-            console.log("Passou por aqui, no erro")
-            console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
-        }
-
-        function getForgeToken(callback) {
-            console.log("Paggou pelo callback")
-            fetch('/api/forge/oauth/token').then(res => {
-                res.json().then(data => {
-                    callback(data.access_token, data.expires_in);
-                });
-            });
-        }
-    </script>
 </body>
 
 </html>
