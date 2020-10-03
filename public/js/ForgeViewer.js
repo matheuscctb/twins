@@ -25,7 +25,7 @@ function launchViewer(urn) {
     };
 
     Autodesk.Viewing.Initializer(options, () => {
-        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {extensions: ['PanelInfoViewerExtension',]});
+        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), { extensions: ['PanelInfoViewerExtension', ] });
         viewer.start();
 
         console.log(urn)
