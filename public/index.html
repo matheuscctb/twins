@@ -317,6 +317,7 @@
     </script>
 
     <script>
+        console.log("Passou por aqui")
         var viewer;
         var options = {
             env: 'AutodeskProduction',
@@ -329,6 +330,7 @@
         // };
 
         Autodesk.Viewing.Initializer(options, function() {
+            console.log("... e aqui 1")
             viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
                 extensions: ['PanelInfoViewerExtension', 'ManutencaoViewerExtension']
             });
@@ -342,6 +344,7 @@
 
 
         function onDocumentLoadSuccess(doc) {
+            console.log("... e aqui 2")
             var viewables = doc.getRoot().getDefaultGeometry();
             viewer.loadDocumentNode(doc, viewables).then(i => {
                 // documented loaded, any action?
