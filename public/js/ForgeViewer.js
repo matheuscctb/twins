@@ -29,6 +29,7 @@ function launchViewer(urn) {
         viewer.start();
 
         console.log(urn)
+        console.log("Carregou o forgeWier1")
         var documentId = 'urn:' + urn;
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
     });
