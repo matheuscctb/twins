@@ -128,7 +128,7 @@
     <script src="js/PanelInfoViewerExtension.js"></script>
     <script src="js/ManutencaoViewerExtension.js"></script>
     <script src="js/NestedViewerExtension.js"></script>
-    <script src="js/ForgeViewer.js"></script>
+
 
 
     <script>
@@ -318,31 +318,41 @@
 
     <script>
         var viewer;
+        var options = {
+            env: 'AutodeskProduction',
+            api: 'derivativeV2', // TODO: for models uploaded to EMEA change this option to 'derivativeV2_EU'
+            getAccessToken: getForgeToken
+        };
+        // var options = {
+        //     env: 'AutodeskProduction',
+        //     getAccessToken: getForgeToken
+        // };
 
-        function launchViewer(urn) {
-            var options = {
-                env: 'AutodeskProduction',
-                getAccessToken: getForgeToken
-            };
-
-            Autodesk.Viewing.Initializer(options, () => {
-                viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
-                    extensions: ['PanelInfoViewerExtension', ]
-                });
-                viewer.start();
-
-                console.log(urn)
-                console.log("Carregou o forgeWier1")
-                var documentId = 'urn:' + urn;
-                Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+        Autodesk.Viewing.Initializer(options, function() {
+            viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
+                extensions: ['PanelInfoViewerExtension', 'ManutencaoViewerExtension']
             });
-        }
+            viewer.start();
+
+            var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotcjIvUHIlQzMlQTlkaW8lMjBDT1JSSUdJRE8lMjAzJTIwKDMpLnJ2dA==';
+
+            // var documentId = 'urn:' + urn;
+            Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+        });
+
 
         function onDocumentLoadSuccess(doc) {
             var viewables = doc.getRoot().getDefaultGeometry();
             viewer.loadDocumentNode(doc, viewables).then(i => {
                 // documented loaded, any action?
+
             });
+            // NestedViewerExtension
+            viewer.loadExtension("NestedViewerExtension", {
+                    filter: ["2d", "3d"],
+                    crossSelection: true
+                })
+                // NestedViewerExtension
         }
 
         function onDocumentLoadFailure(viewerErrorCode) {
