@@ -321,7 +321,7 @@
         var viewer;
         var options = {
             env: 'AutodeskProduction',
-            api: 'derivativeV2', // TODO: for models uploaded to EMEA change this option to 'derivativeV2_EU'
+            api: 'derivativeV3', // TODO: for models uploaded to EMEA change this option to 'derivativeV2_EU'
             getAccessToken: getForgeToken
         };
         // var options = {
@@ -337,7 +337,7 @@
             viewer.start();
 
             //var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotcjIvUHIlQzMlQTlkaW8lMjBDT1JSSUdJRE8lMjAzJTIwKDMpLnJ2dA==';
-
+            console.log("urn: ", urn)
             var documentId = 'urn:' + urn;
             Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
         });
@@ -348,6 +348,7 @@
             var viewables = doc.getRoot().getDefaultGeometry();
             viewer.loadDocumentNode(doc, viewables).then(i => {
                 // documented loaded, any action?
+                console.log("... e aqui 3, depois de carregado")
 
 
             });
