@@ -10,7 +10,7 @@
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
-    <title>SMART TWINS 4.0 com Sara</title>
+    <title>SMART TWINS 4.0</title>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
@@ -72,7 +72,7 @@
         </div>
 
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom col-xs-12 col-md-8">
-            <h1 class="h2">Minha Obra, nada de Sara</h1>
+            <h1 class="h2">Minha Obra</h1>
             <ul class="nav nav-tabs">
                 <li class="nav-item">
                     <a href="#forgeViewer" class="nav-link active" role="tab" data-toggle="tab">Tempo Real</a>
@@ -314,6 +314,48 @@
             });
 
         });
+    </script>
+
+    <script>
+        var viewer;
+
+        function launchViewer(urn) {
+            var options = {
+                env: 'AutodeskProduction',
+                getAccessToken: getForgeToken
+            };
+
+            Autodesk.Viewing.Initializer(options, () => {
+                viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
+                    extensions: ['PanelInfoViewerExtension', ]
+                });
+                viewer.start();
+
+                console.log(urn)
+                console.log("Carregou o forgeWier1")
+                var documentId = 'urn:' + urn;
+                Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+            });
+        }
+
+        function onDocumentLoadSuccess(doc) {
+            var viewables = doc.getRoot().getDefaultGeometry();
+            viewer.loadDocumentNode(doc, viewables).then(i => {
+                // documented loaded, any action?
+            });
+        }
+
+        function onDocumentLoadFailure(viewerErrorCode) {
+            console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
+        }
+
+        function getForgeToken(callback) {
+            fetch('/api/forge/oauth/token').then(res => {
+                res.json().then(data => {
+                    callback(data.access_token, data.expires_in);
+                });
+            });
+        }
     </script>
 </body>
 
