@@ -329,7 +329,7 @@
         // };
 
         Autodesk.Viewing.Initializer(options, function() {
-            viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
+            viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
                 extensions: ['PanelInfoViewerExtension', 'ManutencaoViewerExtension']
             });
             viewer.start();
@@ -346,6 +346,74 @@
             viewer.loadDocumentNode(doc, viewables).then(i => {
                 // documented loaded, any action?
 
+                var obra = document.getElementById('obras').value;
+                var bloco = document.getElementById('bloco').value;
+                var vetorBlocos = []
+                firebase.database().ref('obras/' + obra + '/sequenciareal/' + bloco).once('value').then(snapshot => {
+                    var todosBlocos = (Object.keys(snapshot.val()));
+                    todosBlocos.forEach(value => {
+                        // snapshot.val()[value].status
+                        vetorBlocos.push({
+                            bloco: value,
+                            status: snapshot.val()[value].status
+                        })
+                    })
+                    var vetorTodosElementos = []
+                    getAllLeafComponents(viewer, (dbIds) => {
+                        //Propriedade que quero buscar das elemetos dos setores e formas
+                        const filteredProps = ['Numeração', "Agrupamento"];
+                        // Get only the properties we need for the leaf dbIds
+                        this.viewer.model.getBulkProperties(dbIds, filteredProps, (items) => {
+                            // Iterate through the elements we found
+                            items.forEach((item) => {
+                                // and iterate through each propertys
+                                item.properties.forEach(function(prop) {
+                                    vetorTodosElementos.push(item);
+                                });
+                            });
+                            //Removendo elementos duplicados
+                            var elementos = [...new Set(vetorTodosElementos)];
+
+                            var isolated = []
+                            var aux = 0;
+                            for (i = vetorBlocos.length - 1; i >= 0; i--) {
+                                //Identifica o primeiro pavimento com forma
+                                if (vetorBlocos[i].status == 1 && aux == 0) {
+                                    elementos.forEach(value => {
+                                        if ('0' + value.properties[1].displayValue == vetorBlocos[i].bloco ||
+                                            value.properties[1].displayValue == 0) {
+                                            console.log("aqui1")
+                                            isolated.push(value.dbId);
+                                        }
+                                    })
+                                    aux = 1;
+                                }
+                                //pavimentos anteriores sem formas
+                                else if (vetorBlocos[i].status == 1 && aux == 1) {
+                                    console.log(vetorBlocos[i].bloco)
+                                    elementos.forEach(value => {
+                                        if ((!value.properties[0].displayValue) && '0' + value.properties[1].displayValue == vetorBlocos[i].bloco) {
+                                            console.log("aqui2")
+                                            isolated.push(value.dbId);
+                                        }
+                                    })
+                                }
+                                //obra só com estrutura do piso
+                                else if (vetorBlocos[i].status == 0 && vetorBlocos[i].bloco == vetorBlocos[0].bloco) {
+                                    elementos.forEach(value => {
+                                        if (value.properties[1].displayValue == 0) {
+                                            console.log("aqui3")
+                                            isolated.push(value.dbId);
+                                        }
+                                    })
+                                }
+                            }
+                            viewer.isolate(isolated)
+                            viewer.setGhosting(false);
+                        });
+                    });
+
+                });
             });
             // NestedViewerExtension
             viewer.loadExtension("NestedViewerExtension", {
