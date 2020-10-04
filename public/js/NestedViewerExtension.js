@@ -154,6 +154,7 @@ class NestedViewerPanel extends Autodesk.Viewing.UI.DockingPanel {
     setVisible(show) {
         super.setVisible(show);
         if (show && !this._viewer) {
+            console.log("urn1: ", urn)
             this._viewer = new Autodesk.Viewing.GuiViewer3D(this._container);
             this._viewer.start();
             this._onDropdownChanged();
