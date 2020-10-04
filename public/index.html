@@ -103,7 +103,7 @@
 
         <div class="tab-content col-xs-12 col-md-8">
             <div role="tabpanel" class="tab-pane fade in active" id="forgeViewer" class="col-xs-12 col-md-8"></div>
-            <div role="tabpanel" class="tab-pane fade in active" href="forgeViewer1" class="col-xs-12 col-md-8"></div>
+            <div role="tabpanel" class="tab-pane fade in active" id="forgeViewer1" class="col-xs-12 col-md-8"></div>
 
         </div>
 
@@ -131,6 +131,7 @@
 
 
     <script>
+        var viewer1;
         var viewer;
         var options = {
             env: 'AutodeskProduction',
@@ -143,6 +144,17 @@
         // };
 
         Autodesk.Viewing.Initializer(options, function() {
+
+            viewer1 = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
+                extensions: ['PanelInfoViewerExtension']
+            });
+            viewer1.start();
+            var documentId1 = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotcjIvUHIlQzMlQTlkaW8lMjBDT1JSSUdJRE8lMjAzJTIwKDMpLnJ2dA==';
+
+            Autodesk.Viewing.Document.load(documentId1, onDocumentLoadSuccess1, onDocumentLoadFailure1);
+
+
+
             viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
                 extensions: ['PanelInfoViewerExtension', 'ManutencaoViewerExtension']
             });
@@ -153,6 +165,20 @@
             // var documentId = 'urn:' + urn;
             Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
         });
+
+        function onDocumentLoadSuccess1(doc) {
+            console.log("Passou por sucesso")
+                // if a viewableId was specified, load that view, otherwise the default view
+            var viewables1 = doc.getRoot().getDefaultGeometry();
+            viewer.loadDocumentNode(doc, viewables1).then(i => {
+                // any additional action here?
+            });
+        }
+
+        function onDocumentLoadFailure1(viewerErrorCode) {
+            console.log("Passou por falha")
+            console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
+        }
 
 
         function onDocumentLoadSuccess(doc) {
@@ -314,57 +340,7 @@
 
         });
     </script>
-    <script>
-        console.log("Passou por aqui")
-        var viewer;
 
-        // @urn the model to show
-        // @viewablesId which viewables to show, applies to BIM 360 Plans folder
-        function launchViewer(urn, viewableId) {
-            console.log("Passou por visualização")
-            var options = {
-                env: 'AutodeskProduction',
-                getAccessToken: getForgeToken,
-                api: 'derivativeV2' + (atob(urn.replace('_', '/')).indexOf('emea') > -1 ? '_EU' : '') // handle BIM 360 US and EU regions
-            };
-
-            Autodesk.Viewing.Initializer(options, () => {
-                console.log("Passou por inicialização")
-                viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
-                    extensions: ['Autodesk.DocumentBrowser']
-                });
-                viewer.start();
-                var documentId = 'urn:' + urn;
-                Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
-            });
-
-            function onDocumentLoadSuccess(doc) {
-                console.log("Passou por sucesso")
-                    // if a viewableId was specified, load that view, otherwise the default view
-                var viewables = (viewableId ? doc.getRoot().findByGuid(viewableId) : doc.getRoot().getDefaultGeometry());
-                viewer.loadDocumentNode(doc, viewables).then(i => {
-                    // any additional action here?
-                });
-            }
-
-            function onDocumentLoadFailure(viewerErrorCode) {
-                console.log("Passou por falha")
-                console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
-            }
-        }
-
-        function getForgeToken(callback) {
-            console.log("Passou por callback")
-            fetch('/api/forge/oauth/token').then(res => {
-                res.json().then(data => {
-                    callback(data.access_token, data.expires_in);
-                });
-            });
-        }
-
-        urn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotcjIvUHIlQzMlQTlkaW8lMjBDT1JSSUdJRE8lMjAzJTIwKDMpLnJ2dA==';
-        launchViewer(urn)
-    </script>
 
 
 
