@@ -103,7 +103,7 @@
 
         <div class="tab-content col-xs-12 col-md-8">
             <div role="tabpanel" class="tab-pane fade in active" id="forgeViewer" class="col-xs-12 col-md-8"></div>
-            <div role="tabpanel" class="tab-pane fade in active" href="#forgeViewer" class="col-xs-12 col-md-8"></div>
+            <div role="tabpanel" class="tab-pane fade in active" href="#forgeViewer1" class="col-xs-12 col-md-8"></div>
 
         </div>
 
@@ -321,6 +321,7 @@
         // @urn the model to show
         // @viewablesId which viewables to show, applies to BIM 360 Plans folder
         function launchViewer(urn, viewableId) {
+            console.log("Passou por visualização")
             var options = {
                 env: 'AutodeskProduction',
                 getAccessToken: getForgeToken,
@@ -328,6 +329,7 @@
             };
 
             Autodesk.Viewing.Initializer(options, () => {
+                console.log("Passou por inicialização")
                 viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
                     extensions: ['Autodesk.DocumentBrowser']
                 });
@@ -337,7 +339,8 @@
             });
 
             function onDocumentLoadSuccess(doc) {
-                // if a viewableId was specified, load that view, otherwise the default view
+                console.log("Passou por sucesso")
+                    // if a viewableId was specified, load that view, otherwise the default view
                 var viewables = (viewableId ? doc.getRoot().findByGuid(viewableId) : doc.getRoot().getDefaultGeometry());
                 viewer.loadDocumentNode(doc, viewables).then(i => {
                     // any additional action here?
@@ -345,11 +348,13 @@
             }
 
             function onDocumentLoadFailure(viewerErrorCode) {
+                console.log("Passou por falha")
                 console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
             }
         }
 
         function getForgeToken(callback) {
+            console.log("Passou por callback")
             fetch('/api/forge/oauth/token').then(res => {
                 res.json().then(data => {
                     callback(data.access_token, data.expires_in);
