@@ -107,18 +107,23 @@ function showViewer() {
                         var isolated = []
                         var aux = 0;
 
-                        console.log('vetor blocos: ', vetorBlocos)
-                        console.log('elemtnso:  ', elementos)
+                        //console.log('vetor blocos: ', vetorBlocos)
+                        //console.log('elemtnso:  ', elementos)
                         for (i = vetorBlocos.length - 1; i >= 0; i--) {
                             //Identifica o primeiro pavimento com forma
                             if (vetorBlocos[i].status == 1 && aux == 0) {
                                 elementos.forEach(value => {
                                     //console.log("valur: ", value)
 
-                                    if ('0' + value.properties[1].displayValue == vetorBlocos[i].bloco ||
-                                        value.properties[1].displayValue == 0) {
+                                    var pVetorBlocos = vetorBlocos[i].bloco.replace(/\s/g, '');
+                                    //console.log('pVetorBlocos: ',pVetorBlocos)
 
-                                        console.log(`value.properties[1].displayValue= ${value.properties[1].displayValue}   vetorBlocos[i].bloco:  ${vetorBlocos[i].bloco}    i: ${i}  `)
+    
+                                    if ('0' + value.properties[1].displayValue == pVetorBlocos ||
+                                        value.properties[1].displayValue == 0) {
+                                        //console.log('value: ',value)
+
+                                        //console.log(`value.properties[1].displayValue= ${value.properties[1].displayValue}   vetorBlocos[i].bloco:  ${vetorBlocos[i].bloco}    i: ${i}  `)
                                         console.log("aqui1")
                                         isolated.push(value.dbId);
                                     }
@@ -127,9 +132,10 @@ function showViewer() {
                             }
                             //pavimentos anteriores sem formas
                             else if (vetorBlocos[i].status == 1 && aux == 1) {
-                                console.log(vetorBlocos[i].bloco)
+                                //console.log(vetorBlocos[i].bloco)
+                                var qVetorBlocos = vetorBlocos[i].bloco.replace(/\s/g, '');
                                 elementos.forEach(value => {
-                                    if ((!value.properties[0].displayValue) && '0' + value.properties[1].displayValue == vetorBlocos[i].bloco) {
+                                    if ((!value.properties[0].displayValue) && '0' + value.properties[1].displayValue == qVetorBlocos) {
                                         console.log("aqui2")
                                         isolated.push(value.dbId);
                                     }
@@ -137,6 +143,7 @@ function showViewer() {
                             }
                             //obra só com estrutura do piso
                             else if (vetorBlocos[i].status == 0 && vetorBlocos[i].bloco == vetorBlocos[0].bloco) {
+                                //var wVetorBlocos = vetorBlocos[0].bloco.replace(/\s/g, '');
                                 elementos.forEach(value => {
                                     if (value.properties[1].displayValue == 0) {
                                         console.log("aqui3")
@@ -206,7 +213,7 @@ firebase.database().ref('obras/').once('value', function(snapshot) {
     console.log(obra)
     firebase.database().ref('obras/' + obra + '/sequenciareal').once('value', function(snapshot) {
 
-        console.log('snaptsho.val: ', snapshot.val())
+        //console.log('snaptsho.val: ', snapshot.val())
         var i = 0;
         snapshot.forEach(function(item) {
             var select = document.getElementById("bloco");
