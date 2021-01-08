@@ -26,15 +26,10 @@ function launchViewer(urn) {
     
 
     Autodesk.Viewing.Initializer(options, () => {
-        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), { extensions: ['PanelInfoViewerExtension', ] });
+        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {extensions: ['PanelInfoViewerExtension',]});
         viewer.start();
 
-<<<<<<< HEAD
         console.log('urn: ',urn)
-=======
-        console.log(urn)
-        console.log("Carregou o forgeWier1")
->>>>>>> bbdb3c1314a82c00334259c214a98d7419165fc4
         var documentId = 'urn:' + urn;
         this.urn1 = urn;
 

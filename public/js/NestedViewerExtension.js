@@ -17,7 +17,6 @@ class NestedViewerExtension extends Autodesk.Viewing.Extension {
         //     this.viewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, this._onSelectionChanged);
         // }
         console.log('NestedViewerExtension has been loaded.');
-        console.log("urn: ", urn)
         return true;
     }
 
@@ -89,7 +88,6 @@ class NestedViewerPanel extends Autodesk.Viewing.UI.DockingPanel {
     }
 
     get urn() {
-        console.log("urn: ", this.urn)
         return this._urn;
     }
 
@@ -135,7 +133,7 @@ class NestedViewerPanel extends Autodesk.Viewing.UI.DockingPanel {
         this._dropdown.style.setProperty('z-index', '100');
         this._dropdown.setAttribute('id', 'nestedViewerExtensionDropdown');
         this._dropdown.addEventListener('change', this._onDropdownChanged.bind(this))
-        this._dropdown.addEventListener('mousedown', function(ev) {
+        this._dropdown.addEventListener('mousedown', function (ev) {
             ev.stopPropagation();
         }); // prevent DockingPanel from kidnapping clicks on the dropdown
         this._container.appendChild(this._dropdown);
@@ -154,7 +152,6 @@ class NestedViewerPanel extends Autodesk.Viewing.UI.DockingPanel {
     setVisible(show) {
         super.setVisible(show);
         if (show && !this._viewer) {
-            console.log("urn1: ", urn)
             this._viewer = new Autodesk.Viewing.GuiViewer3D(this._container);
             this._viewer.start();
             this._onDropdownChanged();
@@ -176,10 +173,10 @@ class NestedViewerPanel extends Autodesk.Viewing.UI.DockingPanel {
         const onDocumentLoadSuccess = (doc) => {
             this._manifest = doc;
             const filterGeom = (geom) => this._filter.indexOf(geom.data.role) !== -1;
-            const geometries = doc.getRoot().search({ type: 'geometry' }).filter(filterGeom);
+            const geometries = doc.getRoot().search({type: 'geometry'}).filter(filterGeom);
             if (geometries.length > 0) {
                 this._overlay.style.display = 'none';
-                this._dropdown.innerHTML = geometries.map(function(geom) {
+                this._dropdown.innerHTML = geometries.map(function (geom) {
                     return `<option value="${geom.guid()}">${geom.name()}</option>`;
                 }).join('\n');
             } else {

@@ -18,6 +18,7 @@ var viewer1;
 function showViewer() {
 
 
+
     var options = {
         env: 'AutodeskProduction',
         api: 'derivativeV2', // TODO: for models uploaded to EMEA change this option to 'derivativeV2_EU'
@@ -118,17 +119,8 @@ function showViewer() {
                             //Identifica o primeiro pavimento com forma
                             if (vetorBlocos[i].status == 1 && aux == 0) {
                                 elementos.forEach(value => {
-                                    //console.log("valur: ", value)
-
-                                    var pVetorBlocos = vetorBlocos[i].bloco.replace(/\s/g, '');
-                                    //console.log('pVetorBlocos: ',pVetorBlocos)
-
-
-                                    if ('0' + value.properties[1].displayValue == pVetorBlocos ||
+                                    if ('0' + value.properties[1].displayValue == vetorBlocos[i].bloco ||
                                         value.properties[1].displayValue == 0) {
-                                        //console.log('value: ',value)
-
-                                        //console.log(`value.properties[1].displayValue= ${value.properties[1].displayValue}   vetorBlocos[i].bloco:  ${vetorBlocos[i].bloco}    i: ${i}  `)
                                         console.log("aqui1")
                                         isolated.push(value.dbId);
                                     }
@@ -137,10 +129,9 @@ function showViewer() {
                             }
                             //pavimentos anteriores sem formas
                             else if (vetorBlocos[i].status == 1 && aux == 1) {
-                                //console.log(vetorBlocos[i].bloco)
-                                var qVetorBlocos = vetorBlocos[i].bloco.replace(/\s/g, '');
+                                console.log(vetorBlocos[i].bloco)
                                 elementos.forEach(value => {
-                                    if ((!value.properties[0].displayValue) && '0' + value.properties[1].displayValue == qVetorBlocos) {
+                                    if ((!value.properties[0].displayValue) && '0' + value.properties[1].displayValue == vetorBlocos[i].bloco) {
                                         console.log("aqui2")
                                         isolated.push(value.dbId);
                                     }
@@ -148,7 +139,6 @@ function showViewer() {
                             }
                             //obra só com estrutura do piso
                             else if (vetorBlocos[i].status == 0 && vetorBlocos[i].bloco == vetorBlocos[0].bloco) {
-                                //var wVetorBlocos = vetorBlocos[0].bloco.replace(/\s/g, '');
                                 elementos.forEach(value => {
                                     if (value.properties[1].displayValue == 0) {
                                         console.log("aqui3")
@@ -210,11 +200,8 @@ firebase.database().ref('obras/').once('value', function(snapshot) {
     });
     $("#obras").val($("#obras option:first").val());
     var obra = document.getElementById('obras').value;
-    //var obra = "Duo Salvador Norte - Teste"
     console.log(obra)
     firebase.database().ref('obras/' + obra + '/sequenciareal').once('value', function(snapshot) {
-
-        //console.log('snaptsho.val: ', snapshot.val())
         var i = 0;
         snapshot.forEach(function(item) {
             var select = document.getElementById("bloco");
@@ -230,9 +217,13 @@ firebase.database().ref('obras/').once('value', function(snapshot) {
 })
 
 
-$('#obras').on('change', function() {
+
+
+
+///////////////////////
+
+$('#obras, #bloco').on('change', function() {
     var obra = document.getElementById('obras').value;
-    //var obra = "Duo Salvador Norte - Teste"
     $("#bloco").empty();
     firebase.database().ref('obras/' + obra + '/sequenciareal').once('value', function(snapshot) {
         var i = 0;
