@@ -1,5 +1,5 @@
 {
-  "name": "forgesample",
+  "name": "smarttwins4",
   "version": "1.0.0",
   "description": "Sample application for learnforge.autodesk.io.",
   "main": "start.js",
@@ -11,7 +11,7 @@
     "axios": "^0.20.0",
     "bootstrap": "^4.5.2",
     "express": "^4.17.1",
-    "firebase": "^7.19.0",
+    "firebase": "^7.24.0",
     "forge-apis": "^0.7.3",
     "jquery": "^3.5.1",
     "multer": "^1.4.2",
@@ -25,5 +25,6 @@
     "postcss-loader": "^3.0.0",
     "sass-loader": "^9.0.3",
     "style-loader": "^1.2.1"
-  }
+  },
+  "author": ""
 }
