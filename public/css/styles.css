@@ -6808,10 +6808,6 @@ button.bg-dark:focus {
     background-color: transparent !important;
 }
 
-.border {
-    /* border: 1px solid #dee2e6 !important; */
-}
-
 .border-top {
     border-top: 1px solid #dee2e6 !important;
 }
@@ -10430,7 +10426,8 @@ select {
 @media (min-width: 230px) {
     .card-viewer,
     #forgeViewer,
-    #forgeViewer1 {
+    #forgeViewer1,
+    img {
         padding-bottom: 0.5rem;
         min-height: 530px;
     }
@@ -10576,7 +10573,8 @@ select {
 }
 
 #forgeViewer,
-#forgeViewer1 {
+#forgeViewer1,
+img {
     padding-bottom: 0.5rem;
     min-height: 530px;
 }
