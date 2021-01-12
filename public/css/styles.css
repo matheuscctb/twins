@@ -10619,5 +10619,34 @@ img {
     color: #333;
 }
 
+@-webkit-keyframes spinning {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(180deg);
+    }
+}
 
-/*nestedViewer*/
+@keyframes spinning {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(180deg);
+    }
+}
+
+.square {
+    width: 2rem;
+    height: 2rem;
+    border-width: 5px;
+    border-style: solid;
+    border-color: #999 #ccc;
+    border-radius: 50px;
+    -webkit-animation: spinning 0.75s infinite linear;
+    animation: spinning 0.75s infinite linear;
+    position: absolute;
+    top: 1.5rem;
+    display: none;
+}
