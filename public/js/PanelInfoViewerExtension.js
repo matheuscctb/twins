@@ -57,13 +57,13 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
 Autodesk.Viewing.theExtensionManager.registerExtension('PanelInfoViewerExtension', PanelInfoViewerExtension);
 
 
-SimplePanel = function (parentContainer, id, title, content, x, y) {
+SimplePanel = function(parentContainer, id, title, content, x, y) {
     this.content = content;
     Autodesk.Viewing.UI.DockingPanel.call(this, parentContainer, id, title, '');
 
     // Auto-fit to the content and don't allow resize.  Position at the coordinates given.
     //
-    this.container.style.height = "auto";
+    this.container.style.height = "400px";
     // this.container.style.width = "auto";
     this.container.style.width = "450px";
     this.container.style.resize = "auto";
@@ -76,7 +76,7 @@ SimplePanel = function (parentContainer, id, title, content, x, y) {
 SimplePanel.prototype = Object.create(Autodesk.Viewing.UI.DockingPanel.prototype);
 SimplePanel.prototype.constructor = SimplePanel;
 
-SimplePanel.prototype.initialize = function () {
+SimplePanel.prototype.initialize = function() {
     this.title = this.createTitleBar(this.titleLabel || this.container.id);
     this.container.appendChild(this.title);
 
@@ -88,14 +88,13 @@ SimplePanel.prototype.initialize = function () {
     this.initializeCloseHandler(this.closer);
     this.container.appendChild(this.closer);
 
-    var op = {left: false, heightAdjustment: 100, marginTop: 0};
+    var op = { left: false, heightAdjustment: 100, marginTop: 0 };
     this.scrollcontainer = this.createScrollContainer(op);
 
     // var selection = viewer.getSelection();
     // Get current selection
     const selection = viewer.getSelection();
     // viewer.clearSelection();
-    console.log(selection)
     var numRfid = null;
     var numForma = null;
     var agrupamento = null;
@@ -110,7 +109,7 @@ SimplePanel.prototype.initialize = function () {
                     '<div class="">',
                     '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
                     '<tbody>',
-                    '<tr><td>Sem informações disponíveis no momento.</td></tr>',
+                    '<tr><td>Selecione uma forma!</td></tr>',
                     '</tbody>',
                     '</table>',
                     '</div>',
@@ -120,8 +119,9 @@ SimplePanel.prototype.initialize = function () {
 
                 this.initializeMoveHandlers(this.title);
             }
-            var rfid = getRfid(agrupamento, numForma).then((info => {
-                numRfid = info;
+
+            var rfid = getRfid(agrupamento, numForma).then((numRfid => {
+                //numRfid = info;
 
                 if (!numRfid) {
                     var html = [
@@ -140,59 +140,58 @@ SimplePanel.prototype.initialize = function () {
                     this.initializeMoveHandlers(this.title);
                 }
                 var objeto = getCaracteristicas(numRfid).then((objCaracteristicas => {
-                        caracteristicas = {
-                            nome: objCaracteristicas.nome,
-                            altura: objCaracteristicas.altura,
-                            espessura: objCaracteristicas.espessura,
-                            largura: objCaracteristicas.largura,
-                            peso: objCaracteristicas.peso,
-                            dataUltimoDefeito: objCaracteristicas.dataUltimoDefeito ? objCaracteristicas.dataUltimoDefeito : 'Sem Registro',
-                            descUltimoDefeito: objCaracteristicas.descUltimoDefeito ? objCaracteristicas.descUltimoDefeito : 'Sem Registro',
-                            dataUltimaManutencao: objCaracteristicas.dataUltimaManutencao ? objCaracteristicas.dataUltimaManutencao : 'Sem Registro',
-                            descUltimaManutencao: objCaracteristicas.descUltimaManutencao ? objCaracteristicas.descUltimaManutencao : 'Sem Registro',
-                        }
-                        if (!dados || !numRfid || !caracteristicas) {
-                            html = [
-                                '<div class="uicomponent-panel-controls-container">',
-                                '<div class="">',
-                                '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
-                                '<tbody>',
-                                '<tr><td>Sem informações disponíveis no momento.</td></tr>',
-                                '</tbody>',
-                                '</table>',
-                                '</div>',
-                                '</div>'
-                            ].join('\n');
-                        } else {
-                            var html = [
-                                '<div class="uicomponent-panel-controls-container">',
-                                '<div class="">',
-                                '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
-                                '<tbody>',
-                                '<tr><td>Name</td><td> ' + caracteristicas.nome + '</td></tr>',
-                                '<tr><td>Progresso</td><td><div class="progress">  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div></td></tr>',
-                                '<tr><td>ID</td><td>' + selection + '</td></tr>',
-                                '<tr><td>Agrupamento</td><td>' + agrupamento + '</td></tr>',
-                                '<tr><td>Nº RFID</td><td>' + numRfid + '</td></tr>',
-                                '<tr><td>Largura</td><td>' + caracteristicas.largura + '</td></tr>',
-                                '<tr><td>Espessura</td><td>' + caracteristicas.espessura + '</td></tr>',
-                                '<tr><td>Peso</td><td>' + caracteristicas.peso + '</td></tr>',
-                                '<tr><td>Ultimo Registro de Defeito</td><td>' + caracteristicas.dataUltimoDefeito + '</td></tr>',
-                                '<tr><td>Defeito</td><td>' + caracteristicas.descUltimoDefeito + '</td></tr>',
-                                '<tr><td>Ultimo Registro de Manutenção</td><td>' + caracteristicas.dataUltimaManutencao + '</td></tr>',
-                                '<tr><td>Manutenção</td><td>' + caracteristicas.descUltimaManutencao + '</td></tr>',
-                                '</tbody>',
-                                '</table>',
-                                '</div>',
-                                '</div>'
-                            ].join('\n');
-                        }
-
-                        $(this.scrollContainer).append(html);
-
-                        this.initializeMoveHandlers(this.title);
+                    caracteristicas = {
+                        nome: objCaracteristicas.nome,
+                        altura: objCaracteristicas.altura,
+                        espessura: objCaracteristicas.espessura,
+                        largura: objCaracteristicas.largura,
+                        peso: objCaracteristicas.peso,
+                        dataUltimoDefeito: objCaracteristicas.dataUltimoDefeito ? objCaracteristicas.dataUltimoDefeito : 'Sem Registro',
+                        descUltimoDefeito: objCaracteristicas.descUltimoDefeito ? objCaracteristicas.descUltimoDefeito : 'Sem Registro',
+                        dataUltimaManutencao: objCaracteristicas.dataUltimaManutencao ? objCaracteristicas.dataUltimaManutencao : 'Sem Registro',
+                        descUltimaManutencao: objCaracteristicas.descUltimaManutencao ? objCaracteristicas.descUltimaManutencao : 'Sem Registro',
                     }
-                ))
+                    if (!dados || !numRfid || !caracteristicas) {
+                        html = [
+                            '<div class="uicomponent-panel-controls-container">',
+                            '<div class="">',
+                            '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
+                            '<tbody>',
+                            '<tr><td>Sem informações disponíveis no momento.</td></tr>',
+                            '</tbody>',
+                            '</table>',
+                            '</div>',
+                            '</div>'
+                        ].join('\n');
+                    } else {
+                        var html = [
+                            '<div class="uicomponent-panel-controls-container">',
+                            '<div class="">',
+                            '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
+                            '<tbody>',
+                            '<tr><td>Name</td><td> ' + caracteristicas.nome + '</td></tr>',
+                            '<tr><td>Progresso</td><td><div class="progress">  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div></td></tr>',
+                            '<tr><td>ID</td><td>' + selection + '</td></tr>',
+                            '<tr><td>Agrupamento</td><td>' + agrupamento + '</td></tr>',
+                            '<tr><td>Nº RFID</td><td>' + numRfid + '</td></tr>',
+                            '<tr><td>Largura</td><td>' + caracteristicas.largura + '</td></tr>',
+                            '<tr><td>Espessura</td><td>' + caracteristicas.espessura + '</td></tr>',
+                            '<tr><td>Peso</td><td>' + caracteristicas.peso + '</td></tr>',
+                            '<tr><td>Ultimo Registro de Defeito</td><td>' + caracteristicas.dataUltimoDefeito + '</td></tr>',
+                            '<tr><td>Defeito</td><td>' + caracteristicas.descUltimoDefeito + '</td></tr>',
+                            '<tr><td>Ultimo Registro de Manutenção</td><td>' + caracteristicas.dataUltimaManutencao + '</td></tr>',
+                            '<tr><td>Manutenção</td><td>' + caracteristicas.descUltimaManutencao + '</td></tr>',
+                            '</tbody>',
+                            '</table>',
+                            '</div>',
+                            '</div>'
+                        ].join('\n');
+                    }
+
+                    $(this.scrollContainer).append(html);
+
+                    this.initializeMoveHandlers(this.title);
+                }))
             }));
         })
         // .catch((error) => console.error('ERR! Houve um erro! ->', error));
@@ -212,7 +211,7 @@ function getAllLeafComponents(viewer, callback) {
     function getLeafComponentsRec(parent) {
         cbCount++;
         if (tree.getChildCount(parent) != 0) {
-            tree.enumNodeChildren(parent, function (children) {
+            tree.enumNodeChildren(parent, function(children) {
                 getLeafComponentsRec(children);
             }, false);
         } else {
@@ -221,14 +220,14 @@ function getAllLeafComponents(viewer, callback) {
         if (--cbCount == 0) callback(components);
     }
 
-    viewer.getObjectTree(function (objectTree) {
+    viewer.getObjectTree(function(objectTree) {
         tree = objectTree;
         var allLeafComponents = getLeafComponentsRec(tree.getRootId());
     });
 }
 
 async function getAgrupamento(selection) {
-    return new Promise(function (resolve) {
+    return new Promise(function(resolve) {
         if (selection) {
             getAllLeafComponents(viewer, (dbIds) => {
                 dbIds.forEach((dbId) => {
@@ -250,7 +249,7 @@ async function getAgrupamento(selection) {
 }
 
 async function getNumero(selection) {
-    return new Promise(function (resolve) {
+    return new Promise(function(resolve) {
         if (selection) {
             getAllLeafComponents(viewer, (dbIds) => {
                 dbIds.forEach((dbId) => {
@@ -278,12 +277,31 @@ async function getInfo(selection) {
 }
 
 function getInfoRfid(agrupamento, numero) {
-    return new Promise(function (resolve) {
+    return new Promise(function(resolve) {
         if (agrupamento && numero) {
             var obra = document.getElementById('obras').value;
             var bloco = document.getElementById('bloco').value;
-            firebase.database().ref('obras/' + obra + '/sequenciareal/' + bloco + '/0' + agrupamento).once('value').then(snapshot => {
-                var rfId = snapshot.child(numero).child("codRfid").val();
+            let numpav = parseInt(agrupamento.substr(1, 2), 10)
+            let pav
+            let meiopav
+            let apart
+            let comodo
+
+            if (numpav >= 10) {
+                pav = agrupamento.substr(0, 1) + numpav
+                meiopav = agrupamento.substr(3, 4)
+                apart = agrupamento.substr(7, 1) + '0' + agrupamento.substr(9, 1)
+                comodo = agrupamento.substr(10, 1) + '0' + agrupamento.substr(11, 1)
+            } else {
+                pav = agrupamento.substr(0, 1) + '0' + numpav
+                meiopav = agrupamento.substr(2, 4)
+                apart = agrupamento.substr(6, 1) + '0' + agrupamento.substr(8, 1)
+                comodo = agrupamento.substr(9, 1) + '0' + agrupamento.substr(10, 1)
+
+            }
+            console.log(`${pav}/${meiopav}/${apart}/${comodo}`);
+            firebase.database().ref(`obras/${obra}/sequenciareal/${bloco}/${pav}/${meiopav}/${apart}/${comodo}`).once('value').then(snapshot => {
+                var rfId = snapshot.child(parseInt(numero, 10)).val();
                 resolve(rfId);
             });
         }
@@ -297,25 +315,26 @@ async function getRfid(agrupamento, numero) {
 }
 
 function getInfoRfidFirebase(numRfid) {
-    return new Promise(function (resolve) {
+    return new Promise(function(resolve) {
         if (numRfid) {
             firebase.database().ref('formas').once('value').then(snapshot => {
                 var obj = snapshot.child(numRfid).val();
-                var objDefeito = snapshot.child(numRfid).child('ultimodefeito').val();
-                var objManutencao = snapshot.child(numRfid).child('ultimamanutencao').val();
+                /* var objDefeito = snapshot.child(numRfid).child('ultimodefeito').val();
+                var objManutencao = snapshot.child(numRfid).child('ultimamanutencao').val(); */
                 var caracteristicas = {
                     nome: obj.nome,
                     altura: obj.altura,
                     espessura: obj.espessura,
                     largura: obj.largura,
-                    peso: obj.peso,
-                    dataUltimoDefeito: (objDefeito.data) ? objDefeito.data : 'Sem Registro',
-                    descUltimoDefeito: (objDefeito.defeito) ? objDefeito.defeito : 'Sem Registro',
-                    dataUltimaManutencao: (objManutencao.datafim) ? objManutencao.datafim : 'Sem Registro',
-                    descUltimaManutencao: (objManutencao.reparo) ? objManutencao.reparo : 'Sem Registro',
+                    peso: obj.peso
+
                 }
 
                 resolve(caracteristicas);
+                /* dataUltimoDefeito: (objDefeito.data) ? objDefeito.data : 'Sem Registro',
+                        descUltimoDefeito: (objDefeito.defeito) ? objDefeito.defeito : 'Sem Registro',
+                        dataUltimaManutencao: (objManutencao.datafim) ? objManutencao.datafim : 'Sem Registro',
+                        descUltimaManutencao: (objManutencao.reparo) ? objManutencao.reparo : 'Sem Registro', */
             });
         }
 
