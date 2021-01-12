@@ -120,9 +120,14 @@ SimplePanel.prototype.initialize = function() {
                 this.initializeMoveHandlers(this.title);
             }
 
-            var rfid = getRfid(agrupamento, numForma).then((numRfid => {
+            var rfid = getRfid(agrupamento, numForma).then((dadosNumRfid => {
                 //numRfid = info;
+                var numRfid = dadosNumRfid[0]
+                var progress = dadosNumRfid[1]
 
+                if (!progress) {
+                    progress = 0
+                }
                 if (!numRfid) {
                     var html = [
                         '<div class="uicomponent-panel-controls-container">',
@@ -170,7 +175,7 @@ SimplePanel.prototype.initialize = function() {
                             '<table class="table table-borderlesstable-responsive" id = "clashresultstable">',
                             '<tbody>',
                             '<tr><td>Name</td><td> ' + caracteristicas.nome + '</td></tr>',
-                            '<tr><td>Progresso</td><td><div class="progress">  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 25%;" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">25%</div></div></td></tr>',
+                            `<tr><td>Progresso</td><td><div class="progress">  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: ${progress}%;" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">${progress}%</div></div></td></tr>`,
                             '<tr><td>ID</td><td>' + selection + '</td></tr>',
                             '<tr><td>Agrupamento</td><td>' + agrupamento + '</td></tr>',
                             '<tr><td>Nº RFID</td><td>' + numRfid + '</td></tr>',
@@ -299,10 +304,30 @@ function getInfoRfid(agrupamento, numero) {
                 comodo = agrupamento.substr(9, 1) + '0' + agrupamento.substr(10, 1)
 
             }
-            console.log(`${pav}/${meiopav}/${apart}/${comodo}`);
-            firebase.database().ref(`obras/${obra}/sequenciareal/${bloco}/${pav}/${meiopav}/${apart}/${comodo}`).once('value').then(snapshot => {
-                var rfId = snapshot.child(parseInt(numero, 10)).val();
-                resolve(rfId);
+            //console.log(`${pav}/${meiopav}/${apart}/${comodo}`);
+            var vetorBlocos = 0
+
+            firebase.database().ref(`obras/${obra}`).once('value').then(snapshot => {
+                //-----------------------
+                let identificacao = ""
+                snapshot.child(`sequenciareal/${bloco}`).forEach(function(pavimento) {
+                    pavimento.forEach((meiopavimento) => {
+                        //Identifica se os meio pavimento em construção
+                        vetorBlocos++;
+                    })
+
+
+                });
+                var progress = 100 * (vetorBlocos / (parseInt(snapshot.child('info/pavimentos').val(), 10) * parseInt(snapshot.child('info/setor').val(), 10)))
+
+                //-----------
+
+                //console.log('progress: ', progress)
+
+
+
+                var rfId = snapshot.child(`sequenciareal/${bloco}/${pav}/${meiopav}/${apart}/${comodo}/${parseInt(numero, 10)}`).val();
+                resolve([rfId, progress]);
             });
         }
 
@@ -310,8 +335,8 @@ function getInfoRfid(agrupamento, numero) {
 }
 
 async function getRfid(agrupamento, numero) {
-    let numRfid = await getInfoRfid(agrupamento, numero);
-    return numRfid;
+    let dadosNumRfid = await getInfoRfid(agrupamento, numero);
+    return dadosNumRfid;
 }
 
 function getInfoRfidFirebase(numRfid) {

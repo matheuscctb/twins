@@ -35,7 +35,7 @@ class ManutencaoViewerExtension extends Autodesk.Viewing.Extension {
         // Add a new button to the toolbar group
         this._button = new Autodesk.Viewing.UI.Button('ManutencaoViewerExtensionButton');
         this._button.onClick = (ev) => {
-            console.log('clicou')
+            //console.log('clicou')
             $('.square').show()
 
 
@@ -58,8 +58,8 @@ class ManutencaoViewerExtension extends Autodesk.Viewing.Extension {
                             }
                         });
                     });
-                    console.log('vetorTodosElementos: ', vetorTodosElementos)
-                        //Seleciono todas as formas com informações de agrupamentos e numeração
+                    //console.log('vetorTodosElementos: ', vetorTodosElementos)
+                    //Seleciono todas as formas com informações de agrupamentos e numeração
                     var formas = []
 
                     vetorTodosElementos.forEach((value) => {
@@ -75,8 +75,8 @@ class ManutencaoViewerExtension extends Autodesk.Viewing.Extension {
                         //As formas acabaram duplicadas, aqui acontece a separação
                     var formasFinal = [...new Set(formas)];
 
-                    console.log('formasfinal: ', formasFinal)
-                        //Localizar RFID com a data da leitura no Firebase
+                    //console.log('formasfinal: ', formasFinal)
+                    //Localizar RFID com a data da leitura no Firebase
                     const x = getInfoLeituras(formasFinal)
                         .then(
                             res => {
@@ -122,7 +122,7 @@ async function getRfidAndData(data) {
 
 
     }
-    console.log('data: ', data)
+    //console.log('data: ', data)
     return await data;
     return data;
 }
@@ -195,7 +195,7 @@ async function getHistoricoFormas(data) {
 
     for (const value of data) {
         if (value.properties.length >= 4) {
-            console.log('value: ', value)
+            //console.log('value: ', value)
 
             let rfid = value.properties[2].displayValue;
             let data = value.properties[3].displayValue;
