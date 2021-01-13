@@ -70,6 +70,8 @@ SimplePanel = function(parentContainer, id, title, content, x, y) {
     this.container.style.left = x + "px";
     this.container.style.top = y + "px";
     this.container.style.zIndex = 2;
+    this.container.classList.add('docking-panel-container-solid-color-a');
+
 
 };
 

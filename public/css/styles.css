@@ -10650,3 +10650,7 @@ img {
     top: 1.5rem;
     display: none;
 }
+
+#toolbar-sectionTool {
+    display: block!important;
+}
