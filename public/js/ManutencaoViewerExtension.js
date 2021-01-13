@@ -1,7 +1,7 @@
 class ManutencaoViewerExtension extends Autodesk.Viewing.Extension {
 
-    constructor(viewer, options) {
-        super(viewer, options);
+    constructor(viewer1, options) {
+        super(viewer1, options);
         this._group = null;
         this._button = null;
     }
@@ -16,7 +16,7 @@ class ManutencaoViewerExtension extends Autodesk.Viewing.Extension {
         if (this._group) {
             this._group.removeControl(this._button);
             if (this._group.getNumberOfControls() === 0) {
-                this.viewer.toolbar.removeControl(this._group);
+                this.viewer1.toolbar.removeControl(this._group);
             }
         }
         console.log('ManutencaoViewerExtensions has been unloaded');
@@ -42,7 +42,7 @@ class ManutencaoViewerExtension extends Autodesk.Viewing.Extension {
 
             var vetorTodosElementos = [];
             //encontra todos os dbIds da visualização
-            getAllLeafComponents(viewer, (dbIds) => {
+            getAllLeafComponents(viewer1, (dbIds) => {
                 //Propriedade que quero buscar das formas
                 const filteredProps = ['Numeração', "Agrupamento"];
                 // Get only the properties we need for the leaf dbIds
@@ -200,7 +200,7 @@ async function getHistoricoFormas(data) {
             let rfid = value.properties[2].displayValue;
             let data = value.properties[3].displayValue;
             if (rfid && data) {
-                await getHistoricoDefeitosFormasFirebase(rfid, data).then(response => {
+                await getHistoricoDefeitosFormasFirebase(rfid).then(response => {
                     if (response) {
 
                         value.properties[4] = { displayName: "defeitoData", displayValue: response[0] };
@@ -220,19 +220,19 @@ async function getHistoricoFormas(data) {
 
                 //Cor vermelha
                 if (value.properties[4].displayValue && value.properties[5].displayValue == null) {
-                    viewer.setThemingColor(value.dbId, new THREE.Vector4(1, 0, 0, 1));
+                    viewer1.setThemingColor(value.dbId, new THREE.Vector4(1, 0, 0, 1));
                     noIssue = false
                 }
                 //se tiver data defeito mairo que data manutenção
                 //Cor vermelha
                 else if (value.properties[4].displayValue > value.properties[5].displayValue) {
-                    viewer.setThemingColor(value.dbId, new THREE.Vector4(1, 0, 0, 1));
+                    viewer1.setThemingColor(value.dbId, new THREE.Vector4(1, 0, 0, 1));
                     noIssue = false
                 }
                 //se tiver data manutenção maior que  data defito
                 //Cor verde
                 else if (value.properties[4].displayValue < value.properties[5].displayValue) {
-                    viewer.setThemingColor(value.dbId, new THREE.Vector4(0, 1, 0, 1));
+                    viewer1.setThemingColor(value.dbId, new THREE.Vector4(0, 1, 0, 1));
                     noIssue = false
                 }
 
@@ -254,11 +254,12 @@ async function getHistoricoFormas(data) {
     return data;
 }
 
-function getHistoricoDefeitosFormasFirebase(rfid, data) {
+function getHistoricoDefeitosFormasFirebase(rfid) {
     return new Promise(resolve => {
         if (rfid) {
-            firebase.database().ref('formas/' + rfid + '/historico/defeitos').orderByKey().endAt(data).limitToLast(1).once('value').then(snapshot => {
+            firebase.database().ref('formas/' + rfid + '/historico/defeitos').orderByKey().limitToLast(1).once('value').then(snapshot => {
                 var objDefeito = snapshot.val(); //objeto com as informações do defeito
+                console.log('objdfeito: ', objDefeito)
                 if (objDefeito) {
 
                     let data = Object.keys(objDefeito); //indice do vetor de objeto

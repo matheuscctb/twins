@@ -54,7 +54,7 @@ function showViewer() {
         if (tipo == "Tempo Real") {
 
             viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
-                extensions: ['PanelInfoViewerExtension', 'ManutencaoViewerExtension']
+                extensions: ['PanelInfoViewerExtension']
             });
             viewer.start();
 
@@ -65,7 +65,7 @@ function showViewer() {
         } else {
             setTimeout(function() {
                 viewer1 = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
-                    extensions: ['PanelInfoViewerExtension']
+                    extensions: ['PanelInfoViewerExtension', 'ManutencaoViewerExtension']
 
 
                 });
