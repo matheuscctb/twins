@@ -37,6 +37,9 @@ class ManutencaoViewerExtension extends Autodesk.Viewing.Extension {
         this._button.onClick = (ev) => {
             //console.log('clicou')
             $('.square').show()
+            $('#ManutencaoViewerExtensionButton').addClass('active')
+
+
 
 
 
@@ -83,6 +86,7 @@ class ManutencaoViewerExtension extends Autodesk.Viewing.Extension {
                                 getHistorico(res).then(response => {
                                     console.log('FIM')
                                     $('.square').hide()
+                                    $('#ManutencaoViewerExtensionButton').removeClass('active')
                                 })
                             })
                 });
@@ -259,7 +263,6 @@ function getHistoricoDefeitosFormasFirebase(rfid) {
         if (rfid) {
             firebase.database().ref('formas/' + rfid + '/historico/defeitos').orderByKey().limitToLast(1).once('value').then(snapshot => {
                 var objDefeito = snapshot.val(); //objeto com as informações do defeito
-                console.log('objdfeito: ', objDefeito)
                 if (objDefeito) {
 
                     let data = Object.keys(objDefeito); //indice do vetor de objeto

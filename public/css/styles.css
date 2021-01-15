@@ -10647,7 +10647,8 @@ img {
     -webkit-animation: spinning 0.75s infinite linear;
     animation: spinning 0.75s infinite linear;
     position: absolute;
-    top: 1.5rem;
+    top: 0.75rem;
+    right: 2rem;
     display: none;
 }
 

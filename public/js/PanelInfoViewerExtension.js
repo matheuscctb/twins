@@ -42,8 +42,23 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
 
             }
 
+            var tipo = document.querySelector('[aria-selected="true"]').textContent;
+            var FilhoProjeto
+            var PaiProjeto
+            if (tipo == "Tempo Real") {
+                FilhoProjeto = document.getElementById("ViewerSettingsPanel0-0");
+                PaiProjeto = FilhoProjeto.parentNode;
+
+            } else {
+                FilhoProjeto = document.getElementById("ViewerSettingsPanel1-1");
+                PaiProjeto = FilhoProjeto.parentNode;
+            }
+
+
+
             var content = document.createElement('div');
-            mypanel = new SimplePanel(NOP_VIEWER.container, 'mypanel', 'Dashboard', content, 20, 20);
+            console.log('NOP_VIEWER.container: ', PaiProjeto)
+            mypanel = new SimplePanel(PaiProjeto, 'mypanel', 'Dashboard', content, 20, 20);
             mypanel.setVisible(true);
             this._button.addClass('active');
 
@@ -93,9 +108,16 @@ SimplePanel.prototype.initialize = function() {
     var op = { left: false, heightAdjustment: 100, marginTop: 0 };
     this.scrollcontainer = this.createScrollContainer(op);
 
-    // var selection = viewer.getSelection();
-    // Get current selection
-    const selection = viewer.getSelection();
+    var selection
+        // Get current selection
+
+    var tipo = document.querySelector('[aria-selected="true"]').textContent;
+    if (tipo == "Tempo Real") {
+        selection = viewer.getSelection();
+    } else {
+        selection = viewer1.getSelection();
+    }
+    //const selection = viewer.getSelection();
     // viewer.clearSelection();
     var numRfid = null;
     var numForma = null;

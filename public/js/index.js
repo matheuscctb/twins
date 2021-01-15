@@ -65,7 +65,7 @@ function showViewer() {
         } else {
             setTimeout(function() {
                 viewer1 = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
-                    extensions: ['PanelInfoViewerExtension', 'ManutencaoViewerExtension']
+                    extensions: ['ManutencaoViewerExtension', 'PanelInfoViewerExtension', ]
 
 
                 });
