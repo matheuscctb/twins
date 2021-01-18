@@ -368,14 +368,19 @@ function getInfoRfidFirebase(numRfid) {
         if (numRfid) {
             firebase.database().ref('formas').once('value').then(snapshot => {
                 var obj = snapshot.child(numRfid).val();
-                /* var objDefeito = snapshot.child(numRfid).child('ultimodefeito').val();
-                var objManutencao = snapshot.child(numRfid).child('ultimamanutencao').val(); */
+                var objDefeito = snapshot.child(numRfid).child('ultimodefeito').val();
+                var objManutencao = snapshot.child(numRfid).child('ultimamanutencao').val();
                 var caracteristicas = {
                     nome: obj.nome,
                     altura: obj.altura,
                     espessura: obj.espessura,
                     largura: obj.largura,
-                    peso: obj.peso
+                    peso: obj.peso,
+                    dataUltimoDefeito: (objDefeito) ? objDefeito.data : 'Sem Registro',
+                    descUltimoDefeito: (objDefeito) ? objDefeito.defeito : 'Sem Registro',
+                    dataUltimaManutencao: (objManutencao) ? objManutencao.datafim : 'Sem Registro',
+                    descUltimaManutencao: (objManutencao) ? objManutencao.reparo : 'Sem Registro',
+
 
                 }
 
