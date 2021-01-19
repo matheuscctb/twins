@@ -40,8 +40,18 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
                 mypanel = null;
                 this._button.removeClass('active');
 
+
             }
 
+
+
+
+            if (screen.width <= 1000) {
+
+                $('#btn-close1').css('display', 'block')
+            } else {
+                $('#btn-close').css('display', 'block')
+            }
             var tipo = document.querySelector('[aria-selected="true"]').textContent;
             var FilhoProjeto
             var PaiProjeto
@@ -59,10 +69,22 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
             var content = document.createElement('div');
             console.log('NOP_VIEWER.container: ', PaiProjeto)
             mypanel = new SimplePanel(PaiProjeto, 'mypanel', 'Dashboard', content, 20, 20);
+
             mypanel.setVisible(true);
+
             this._button.addClass('active');
 
+
+
+
+
+
+
+
+
+
         };
+
         this._button.setToolTip('Informações das Formas');
         this._button.addClass('PanelInfoViewerExtensionIcon');
         this._group.addControl(this._button);
@@ -100,10 +122,12 @@ SimplePanel.prototype.initialize = function() {
     this.container.appendChild(this.content);
     this.initializeMoveHandlers(this.container);
 
-    this.closer = document.createElement("span");
-    this.closer = this.createCloseButton();
-    this.initializeCloseHandler(this.closer);
-    this.container.appendChild(this.closer);
+
+    /* this.closer = this.createCloseButton();
+    this.container.appendChild(this.closer); */
+
+    this.footer = this.createFooter();
+    this.container.appendChild(this.footer);
 
     var op = { left: false, heightAdjustment: 100, marginTop: 0 };
     this.scrollcontainer = this.createScrollContainer(op);
@@ -141,7 +165,7 @@ SimplePanel.prototype.initialize = function() {
                 ].join('\n');
                 $(this.scrollContainer).append(html);
 
-                this.initializeMoveHandlers(this.title);
+                //this.initializeMoveHandlers(this.title);
             }
 
             var rfid = getRfid(agrupamento, numForma).then((dadosNumRfid => {
@@ -166,7 +190,7 @@ SimplePanel.prototype.initialize = function() {
                     ].join('\n');
                     $(this.scrollContainer).append(html);
 
-                    this.initializeMoveHandlers(this.title);
+                    //this.initializeMoveHandlers(this.title);
                 }
                 var objeto = getCaracteristicas(numRfid).then((objCaracteristicas => {
                     caracteristicas = {
@@ -219,7 +243,7 @@ SimplePanel.prototype.initialize = function() {
 
                     $(this.scrollContainer).append(html);
 
-                    this.initializeMoveHandlers(this.title);
+                    //this.initializeMoveHandlers(this.title);
                 }))
             }));
         })

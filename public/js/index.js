@@ -46,6 +46,9 @@ function showViewer() {
         getAccessToken: getForgeToken
     };
 
+    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
+        extensions: ['PanelInfoViewerExtension']
+    });
     Autodesk.Viewing.Initializer(options, function(event) {
 
 
@@ -53,9 +56,6 @@ function showViewer() {
         var tipo = document.querySelector('[aria-selected="true"]').textContent;
         if (tipo == "Tempo Real") {
 
-            viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
-                extensions: ['PanelInfoViewerExtension']
-            });
             viewer.start();
 
             var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotc25yL1NOUl9IQUJfRklYXzAyXzIwMTlfUjEucnZ0';
@@ -113,6 +113,26 @@ function showViewer() {
             var obra = document.getElementById('obras').value;
             var bloco = document.getElementById('bloco').value;
             var vetorBlocos = []
+            $('#PanelInfoViewerExtensionButton').on('click', function() {
+                console.log(screen.width)
+                if (screen.width >= 1000) {
+                    $('#mypanel').append('<button id="btn-close" style="display: block;"></button>')
+
+                    $('#btn-close').on('click', function() {
+                        $('#mypanel').toggle();
+                        $('#btn-close').toggle();
+
+
+
+
+                    })
+                }
+
+
+
+
+
+            })
 
             if (bloco == "empty") {
                 var vetorTodosElementos = []
@@ -319,5 +339,14 @@ firebase.database().ref('obras/').on('value', function(snapshot) {
             //$('[apagar="real"]').html(`<div class="col-lg-12" id="forgeViewer"><img src="./img/erromodelo.jpg" alt="Erro Modelo" class="col-lg-12 shadow" ></div>`)
     }
     showViewer()
+
+})
+
+$('#btn-close1 ').on('click', function() {
+    $('#mypanel').toggle();
+    $('#btn-close1').toggle();
+
+
+
 
 })

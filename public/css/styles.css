@@ -10655,3 +10655,42 @@ img {
 #toolbar-sectionTool {
     display: block!important;
 }
+
+#btn-close {
+    top: 0;
+    right: 0;
+    width: 20px;
+    height: 50px;
+    background-position: 0 19px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    background-color: transparent;
+    border: transparent;
+    z-index: 999;
+    background-image: url("data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTEiIGhlaWdodD0iMTEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48cGF0aCBkPSJNLjQ1NSAxMC45OTdhLjUuNSAwIDAxLS4zMS0uODVsMTAtMTBhLjUwMi41MDIgMCAwMS43MS43MWwtMTAgMTBhLjUuNSAwIDAxLS40LjE0eiIgZmlsbD0iIzk0OTQ5RiIvPjxwYXRoIGQ9Ik0xMC40NTcgMTEuMDA3YS41LjUgMCAwMS0uMzEtLjE1bC0xMC0xMGEuNTAyLjUwMiAwIDAxLjcxLS43MWwxMCAxMGEuNS41IDAgMDEtLjQuODZ6IiBmaWxsPSIjOTM5Q0E1Ii8+PC9nPjwvc3ZnPg==")
+}
+
+#btn-close1 {
+    top: 15.5rem;
+    right: 2rem;
+    width: 30px;
+    height: 30px;
+    background-position: 0 19px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    background-color: gray;
+    border: transparent;
+    z-index: 999;
+    display: none;
+    border-radius: 20px;
+    color: darkgray;
+}
+
+
+/* @media (max-width: 576px) {
+    #btn-close1 {
+        display: block !important;
+    }
+} */
