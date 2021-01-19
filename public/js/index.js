@@ -114,11 +114,10 @@ function showViewer() {
             var bloco = document.getElementById('bloco').value;
             var vetorBlocos = []
             $('#PanelInfoViewerExtensionButton').on('click', function() {
-                console.log(screen.width)
-                if (screen.width >= 1000) {
+                
                     $('#mypanel').append('<button id="btn-close" style="display: block;"></button>')
 
-                    $('#btn-close').on('click', function() {
+                    $('#btn-close').on('click touchstart', function() {
                         $('#mypanel').toggle();
                         $('#btn-close').toggle();
 
@@ -126,7 +125,7 @@ function showViewer() {
 
 
                     })
-                }
+                
 
 
 
@@ -339,14 +338,5 @@ firebase.database().ref('obras/').on('value', function(snapshot) {
             //$('[apagar="real"]').html(`<div class="col-lg-12" id="forgeViewer"><img src="./img/erromodelo.jpg" alt="Erro Modelo" class="col-lg-12 shadow" ></div>`)
     }
     showViewer()
-
-})
-
-$('#btn-close1 ').on('click', function() {
-    $('#mypanel').toggle();
-    $('#btn-close1').toggle();
-
-
-
 
 })

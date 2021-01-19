@@ -42,16 +42,7 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
 
 
             }
-
-
-
-
-            if (screen.width <= 1000) {
-
-                $('#btn-close1').css('display', 'block')
-            } else {
-                $('#btn-close').css('display', 'block')
-            }
+            $('#btn-close').css('display', 'block')
             var tipo = document.querySelector('[aria-selected="true"]').textContent;
             var FilhoProjeto
             var PaiProjeto
