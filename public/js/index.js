@@ -13,26 +13,6 @@ var firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 
 
-
-// firebase.analytics();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 var viewer;
 var viewer1;
 
@@ -46,9 +26,6 @@ function showViewer() {
         getAccessToken: getForgeToken
     };
 
-    viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
-        extensions: ['PanelInfoViewerExtension']
-    });
     Autodesk.Viewing.Initializer(options, function(event) {
 
 
@@ -56,6 +33,9 @@ function showViewer() {
         var tipo = document.querySelector('[aria-selected="true"]').textContent;
         if (tipo == "Tempo Real") {
 
+            viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
+                extensions: ['PanelInfoViewerExtension']
+            });
             viewer.start();
 
             var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotc25yL1NOUl9IQUJfRklYXzAyXzIwMTlfUjEucnZ0';
@@ -113,27 +93,6 @@ function showViewer() {
             var obra = document.getElementById('obras').value;
             var bloco = document.getElementById('bloco').value;
             var vetorBlocos = []
-                /* $('#PanelInfoViewerExtensionButton').on('click', function() {
-
-                    $('#mypanel').append('<button id="btn-close" style="display: block;"></button>')
-
-
-                    $('#btn-close').on('click touchstart', function() {
-                        $('#mypanel').toggle();
-                        $('#btn-close').toggle();
-                        viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, showNewPanel);
-
-
-
-
-                    })
-
-
-
-
-
-
-                }) */
 
             if (bloco == "empty") {
                 var vetorTodosElementos = []
@@ -320,6 +279,7 @@ $('#inteiro-tab').on('click', function() {
 })
 
 $('#bloco').on('change', function() {
+  $('[apagar="real"]').html(`<div class="col-lg-12" id="forgeViewer"></div>`)
     showViewer()
 })
 

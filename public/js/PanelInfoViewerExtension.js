@@ -40,84 +40,25 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
                 mypanel = null;
                 this._button.removeClass('active');
 
-
             }
+
             var tipo = document.querySelector('[aria-selected="true"]').textContent;
             var PaiProjeto
-            var actualViewer
             if (tipo == "Tempo Real") {
                 PaiProjeto = document.getElementById('forgeViewer').childNodes[0]
-                actualViewer = this.viewer
 
             } else {
                 PaiProjeto = document.getElementById('forgeViewer1').childNodes[0]
-                actualViewer = viewer1
             }
 
-            console.log('actualviewer: ', actualViewer)
+
 
             var content = document.createElement('div');
             mypanel = new SimplePanel(PaiProjeto, 'mypanel', 'Dashboard', content, 20, 20);
-
             mypanel.setVisible(true);
-
             this._button.addClass('active');
 
-            actualViewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, function showNewPanel() {
-                var tipo = document.querySelector('[aria-selected="true"]').textContent;
-
-
-                if (mypanel != null) {
-                    //NOP_VIEWER.container.removeChild( mypanel.container );
-                    mypanel.uninitialize();
-                    mypanel = null;
-
-
-                }
-                //$('#btn-close').css('display', 'block')
-                var PaiProjeto
-                if (tipo == "Tempo Real") {
-                    PaiProjeto = document.getElementById('forgeViewer').childNodes[0]
-
-                } else {
-                    PaiProjeto = document.getElementById('forgeViewer1').childNodes[0]
-                }
-
-
-
-                var content = document.createElement('div');
-                mypanel = new SimplePanel(PaiProjeto, 'mypanel', 'Dashboard', content, 20, 20);
-
-                mypanel.setVisible(true);
-
-                $(`#${actualViewer.clientContainer.id} > .docking-panel-close`).on('click touchstart', function() {
-                    //$('#mypanel').hide()
-                    //document.getElementById('mypanel')
-                    //$('#btn-close').toggle();
-                    //viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, showNewPanel);
-                    console.log('sarass')
-
-
-
-
-                    actualViewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, showNewPanel);
-                })
-
-
-
-            });
-
-
-
-
-
-
-
-
-
-
         };
-
         this._button.setToolTip('Informações das Formas');
         this._button.addClass('PanelInfoViewerExtensionIcon');
         this._group.addControl(this._button);
@@ -155,21 +96,13 @@ SimplePanel.prototype.initialize = function() {
     this.container.appendChild(this.content);
     this.initializeMoveHandlers(this.container);
 
-
+    
     this.closer = this.createCloseButton();
     this.container.appendChild(this.closer);
-    //var viewer = this.viewer
-    $('.docking-panel-close').on('click touchstart', function() {
-            $('#mypanel').hide()
-                //document.getElementById('mypanel')
-                //$('#btn-close').toggle();
-                //viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, showNewPanel);
 
-
-
-
-        })
-        /* $('#mypanel').append('<button id="btn-close" style="display: block;"></button>')  docking-panel-close*/
+    $('.docking-panel-close').on('click touchstart',function(){
+      $('#mypanel').hide()
+    })
 
     this.footer = this.createFooter();
     this.container.appendChild(this.footer);
@@ -210,7 +143,7 @@ SimplePanel.prototype.initialize = function() {
                 ].join('\n');
                 $(this.scrollContainer).append(html);
 
-                //this.initializeMoveHandlers(this.title);
+                this.initializeMoveHandlers(this.title);
             }
 
             var rfid = getRfid(agrupamento, numForma).then((dadosNumRfid => {
@@ -235,7 +168,7 @@ SimplePanel.prototype.initialize = function() {
                     ].join('\n');
                     $(this.scrollContainer).append(html);
 
-                    //this.initializeMoveHandlers(this.title);
+                    this.initializeMoveHandlers(this.title);
                 }
                 var objeto = getCaracteristicas(numRfid).then((objCaracteristicas => {
                     caracteristicas = {
@@ -288,7 +221,7 @@ SimplePanel.prototype.initialize = function() {
 
                     $(this.scrollContainer).append(html);
 
-                    //this.initializeMoveHandlers(this.title);
+                    this.initializeMoveHandlers(this.title);
                 }))
             }));
         })
@@ -448,16 +381,11 @@ function getInfoRfidFirebase(numRfid) {
                     dataUltimoDefeito: (objDefeito) ? objDefeito.data : 'Sem Registro',
                     descUltimoDefeito: (objDefeito) ? objDefeito.defeito : 'Sem Registro',
                     dataUltimaManutencao: (objManutencao) ? objManutencao.datafim : 'Sem Registro',
-                    descUltimaManutencao: (objManutencao) ? objManutencao.reparo : 'Sem Registro',
-
+                    descUltimaManutencao: (objManutencao) ? objManutencao.reparo : 'Sem Registro'
 
                 }
 
                 resolve(caracteristicas);
-                /* dataUltimoDefeito: (objDefeito.data) ? objDefeito.data : 'Sem Registro',
-                        descUltimoDefeito: (objDefeito.defeito) ? objDefeito.defeito : 'Sem Registro',
-                        dataUltimaManutencao: (objManutencao.datafim) ? objManutencao.datafim : 'Sem Registro',
-                        descUltimaManutencao: (objManutencao.reparo) ? objManutencao.reparo : 'Sem Registro', */
             });
         }
 
