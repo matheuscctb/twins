@@ -66,6 +66,38 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
         this._button.setToolTip('Informações das Formas');
         this._button.addClass('PanelInfoViewerExtensionIcon');
         this._group.addControl(this._button);
+
+        actualViewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, function selectionChangedShowNewPanel(){
+            if (mypanel != null) {
+                //NOP_VIEWER.container.removeChild( mypanel.container );
+                mypanel.uninitialize();
+                mypanel = null;
+
+            }
+
+            var tipo = document.querySelector('[aria-selected="true"]').textContent;
+            if (tipo == "Tempo Real") {
+                actualViewer = this.viewer
+
+            } else {
+                actualViewer = viewer1
+            }
+
+
+
+            var content = document.createElement('div');
+            mypanel = new SimplePanel(actualViewer.container, 'mypanel-'+actualViewer.clientContainer.id, 'Dashboard', content, 20, 20);
+            mypanel.setVisible(true);
+
+            $('.docking-panel-close').on('click touchstart',function(){
+                
+              $('#mypanel-'+actualViewer.clientContainer.id).hide()
+              actualViewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, selectionChangedShowNewPanel);
+            })
+
+        
+        
+        });
     }
 }
 
