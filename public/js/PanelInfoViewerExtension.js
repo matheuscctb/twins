@@ -41,24 +41,25 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
                 this._button.removeClass('active');
 
             }
+            var actualViewer
 
             var tipo = document.querySelector('[aria-selected="true"]').textContent;
-            var PaiProjeto
             if (tipo == "Tempo Real") {
-                PaiProjeto = document.getElementById('forgeViewer').childNodes[0]
+                actualViewer = this.viewer
 
             } else {
-                PaiProjeto = document.getElementById('forgeViewer1').childNodes[0]
+                actualViewer = viewer1
             }
 
 
 
             var content = document.createElement('div');
-            mypanel = new SimplePanel(PaiProjeto, 'mypanel', 'Dashboard', content, 20, 20);
+            mypanel = new SimplePanel(actualViewer.container, 'mypanel-'+actualViewer.clientContainer.id, 'Dashboard', content, 20, 20);
             mypanel.setVisible(true);
             this._button.addClass('active');
             $('.docking-panel-close').on('click touchstart',function(){
-              $('#mypanel').hide()
+                
+              $('#mypanel-'+actualViewer.clientContainer.id).hide()
             })
 
         };
