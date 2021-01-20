@@ -90,7 +90,7 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
 
                 mypanel.setVisible(true);
 
-                $(`#${PaiProjeto.clientContainer.id} > .docking-panel-close`).on('click touchstart', function() {
+                $(`#${actualViewer.clientContainer.id} > .docking-panel-close`).on('click touchstart', function() {
                     //$('#mypanel').hide()
                     //document.getElementById('mypanel')
                     //$('#btn-close').toggle();
