@@ -113,25 +113,27 @@ function showViewer() {
             var obra = document.getElementById('obras').value;
             var bloco = document.getElementById('bloco').value;
             var vetorBlocos = []
-            $('#PanelInfoViewerExtensionButton').on('click', function() {
-                
+                /* $('#PanelInfoViewerExtensionButton').on('click', function() {
+
                     $('#mypanel').append('<button id="btn-close" style="display: block;"></button>')
+
 
                     $('#btn-close').on('click touchstart', function() {
                         $('#mypanel').toggle();
                         $('#btn-close').toggle();
+                        viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, showNewPanel);
 
 
 
 
                     })
-                
 
 
 
 
 
-            })
+
+                }) */
 
             if (bloco == "empty") {
                 var vetorTodosElementos = []

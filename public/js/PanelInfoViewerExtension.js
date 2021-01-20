@@ -42,28 +42,70 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
 
 
             }
-            $('#btn-close').css('display', 'block')
             var tipo = document.querySelector('[aria-selected="true"]').textContent;
-            var FilhoProjeto
             var PaiProjeto
+            var actualViewer
             if (tipo == "Tempo Real") {
-                FilhoProjeto = document.getElementById("ViewerSettingsPanel0-0");
-                PaiProjeto = FilhoProjeto.parentNode;
+                PaiProjeto = document.getElementById('forgeViewer').childNodes[0]
+                actualViewer = this.viewer
 
             } else {
-                FilhoProjeto = document.getElementById("ViewerSettingsPanel1-1");
-                PaiProjeto = FilhoProjeto.parentNode;
+                PaiProjeto = document.getElementById('forgeViewer1').childNodes[0]
+                actualViewer = viewer1
             }
 
-
+            console.log('actualviewer: ', actualViewer)
 
             var content = document.createElement('div');
-            console.log('NOP_VIEWER.container: ', PaiProjeto)
             mypanel = new SimplePanel(PaiProjeto, 'mypanel', 'Dashboard', content, 20, 20);
 
             mypanel.setVisible(true);
 
             this._button.addClass('active');
+
+            actualViewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, function showNewPanel() {
+                var tipo = document.querySelector('[aria-selected="true"]').textContent;
+
+
+                if (mypanel != null) {
+                    //NOP_VIEWER.container.removeChild( mypanel.container );
+                    mypanel.uninitialize();
+                    mypanel = null;
+
+
+                }
+                //$('#btn-close').css('display', 'block')
+                var PaiProjeto
+                if (tipo == "Tempo Real") {
+                    PaiProjeto = document.getElementById('forgeViewer').childNodes[0]
+
+                } else {
+                    PaiProjeto = document.getElementById('forgeViewer1').childNodes[0]
+                }
+
+
+
+                var content = document.createElement('div');
+                mypanel = new SimplePanel(PaiProjeto, 'mypanel', 'Dashboard', content, 20, 20);
+
+                mypanel.setVisible(true);
+
+                $(`#${PaiProjeto.clientContainer.id} > .docking-panel-close`).on('click touchstart', function() {
+                    //$('#mypanel').hide()
+                    //document.getElementById('mypanel')
+                    //$('#btn-close').toggle();
+                    //viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, showNewPanel);
+                    console.log('sarass')
+
+
+
+
+                    actualViewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, showNewPanel);
+                })
+
+
+
+            });
 
 
 
@@ -114,8 +156,20 @@ SimplePanel.prototype.initialize = function() {
     this.initializeMoveHandlers(this.container);
 
 
-    /* this.closer = this.createCloseButton();
-    this.container.appendChild(this.closer); */
+    this.closer = this.createCloseButton();
+    this.container.appendChild(this.closer);
+    //var viewer = this.viewer
+    $('.docking-panel-close').on('click touchstart', function() {
+            $('#mypanel').hide()
+                //document.getElementById('mypanel')
+                //$('#btn-close').toggle();
+                //viewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, showNewPanel);
+
+
+
+
+        })
+        /* $('#mypanel').append('<button id="btn-close" style="display: block;"></button>')  docking-panel-close*/
 
     this.footer = this.createFooter();
     this.container.appendChild(this.footer);
