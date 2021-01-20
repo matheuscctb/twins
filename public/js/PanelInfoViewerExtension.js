@@ -57,6 +57,9 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
             mypanel = new SimplePanel(PaiProjeto, 'mypanel', 'Dashboard', content, 20, 20);
             mypanel.setVisible(true);
             this._button.addClass('active');
+            $('.docking-panel-close').on('click touchstart',function(){
+              $('#mypanel').hide()
+            })
 
         };
         this._button.setToolTip('Informações das Formas');
@@ -99,10 +102,6 @@ SimplePanel.prototype.initialize = function() {
     
     this.closer = this.createCloseButton();
     this.container.appendChild(this.closer);
-
-    $('.docking-panel-close').on('click touchstart',function(){
-      $('#mypanel').hide()
-    })
 
     this.footer = this.createFooter();
     this.container.appendChild(this.footer);
