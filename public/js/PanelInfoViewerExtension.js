@@ -62,7 +62,7 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
               $('#mypanel-'+actualViewer.clientContainer.id).hide()
             })
 
-        };
+        
         this._button.setToolTip('Informações das Formas');
         this._button.addClass('PanelInfoViewerExtensionIcon');
         this._group.addControl(this._button);
@@ -98,6 +98,7 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
         
         
         });
+        };
     }
 }
 
