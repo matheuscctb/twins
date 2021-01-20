@@ -45,7 +45,7 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
 
             var tipo = document.querySelector('[aria-selected="true"]').textContent;
             if (tipo == "Tempo Real") {
-                actualViewer = this.viewer
+                actualViewer = viewer
 
             } else {
                 actualViewer = viewer1
@@ -62,22 +62,17 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
               $('#mypanel-'+actualViewer.clientContainer.id).hide()
             })
 
-        
-        this._button.setToolTip('Informações das Formas');
-        this._button.addClass('PanelInfoViewerExtensionIcon');
-        this._group.addControl(this._button);
-
-        actualViewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, function selectionChangedShowNewPanel(){
+            actualViewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, function selectionChangedShowNewPanel(){
             if (mypanel != null) {
                 //NOP_VIEWER.container.removeChild( mypanel.container );
                 mypanel.uninitialize();
                 mypanel = null;
 
             }
-
+            var actualViewer
             var tipo = document.querySelector('[aria-selected="true"]').textContent;
             if (tipo == "Tempo Real") {
-                actualViewer = this.viewer
+                actualViewer = viewer
 
             } else {
                 actualViewer = viewer1
@@ -97,8 +92,12 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
 
         
         
-        });
+            });
+
         };
+        this._button.setToolTip('Informações das Formas');
+        this._button.addClass('PanelInfoViewerExtensionIcon');
+        this._group.addControl(this._button);
     }
 }
 
