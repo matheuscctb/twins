@@ -106,29 +106,58 @@ async function getRfidAndData(data) {
         var numero = value.properties[1].displayValue;
         //console.log(`agrupamento: ${agrupamento}  numero: ${numero}`)
 
-        await getInfoOnlyRfidFirebase(agrupamento, numero).then(response => {
-            if (response) {
-                value.properties[2] = { displayName: "rfid", displayValue: response };
+        await getInfoRfidDataFirebase(agrupamento, numero).then(response => {
+            if (response[0] && response[1]) {
+                value.properties[2] = { displayName: "rfid", displayValue: response[0] };
+                value.properties[3] = { displayName: "dataLeitura", displayValue: response[1] };
             } else {
                 value.properties[2] = { displayName: "rfid", displayValue: null };
+                value.properties[3] = { displayName: "dataLeitura", displayValue: null };
             }
         })
-        if (value.properties[2].displayValue) {
-
-            await getInfoDataFirebase(value.properties[2].displayValue).then(response => {
-                if (response) {
-                    value.properties[3] = { displayName: "dataLeitura", displayValue: response };
-                } else {
-                    value.properties[3] = { displayName: "dataLeitura", displayValue: null };
-                }
-            })
-        }
-
 
     }
     //console.log('data: ', data)
     return await data;
     return data;
+}
+
+function getInfoRfidDataFirebase(agrupamento, numero) {
+    return new Promise(resolve => {
+
+        if (agrupamento && numero) {
+            var obra = document.getElementById('obras').value;
+            var bloco = document.getElementById('bloco').value;
+            let numpav = parseInt(agrupamento.substr(1, 2), 10)
+            let pav
+            let meiopav
+            let apart
+            let comodo
+
+            if (numpav >= 10) {
+                pav = agrupamento.substr(0, 1) + numpav
+                meiopav = agrupamento.substr(3, 4)
+                apart = agrupamento.substr(7, 1) + '0' + agrupamento.substr(9, 1)
+                comodo = agrupamento.substr(10, 1) + '0' + agrupamento.substr(11, 1)
+            } else {
+                pav = agrupamento.substr(0, 1) + '0' + numpav
+                meiopav = agrupamento.substr(2, 4)
+                apart = agrupamento.substr(6, 1) + '0' + agrupamento.substr(8, 1)
+                comodo = agrupamento.substr(9, 1) + '0' + agrupamento.substr(10, 1)
+
+            }
+
+            firebase.database().ref(`obras/${obra}/sequenciareal/${bloco}/${pav}/${meiopav}/${apart}/${comodo}`).once('value').then(snapshot => {
+                var rfId = snapshot.child(parseInt(numero, 10)).val();
+                var data = snapshot.child("data").val();
+                if (rfId && data) {
+                    resolve([rfId, data])
+                } else {
+                    resolve([null, null])
+                }
+            });
+        }
+    });
 }
 
 async function getInfoLeituras(data) {
@@ -204,25 +233,15 @@ async function getHistoricoFormas(data) {
             let rfid = value.properties[2].displayValue;
             let data = value.properties[3].displayValue;
             if (rfid && data) {
-                await getHistoricoDefeitosFormasFirebase(rfid).then(response => {
-                    if (response) {
-
-                        value.properties[4] = { displayName: "defeitoData", displayValue: response[0] };
-                    } else {
-                        value.properties[4] = { displayName: "defeitoData", displayValue: null };
-                    }
+                await getHistoricoDefeitosFormasFirebase(rfid, data).then(response => {
+                    value.properties[4] = response ? { displayName: "defeitoData", displayValue: response[0] } : { displayName: "manutencaoData", displayValue: response };
                 })
                 await getHistoricoManutencaoFormasFirebase(rfid, data).then(response => {
-                        if (response) {
-
-                            value.properties[5] = { displayName: "manutencaoData", displayValue: response[0] };
-                        } else {
-                            value.properties[5] = { displayName: "manutencaoData", displayValue: null };
-                        }
-                    })
-                    //se só tiver data deifeito
+                    value.properties[5] = response ? { displayName: "manutencaoData", displayValue: response[0] } : { displayName: "manutencaoData", displayValue: response };
+                })
 
                 //Cor vermelha
+                console.log('vlue: ', value)
                 if (value.properties[4].displayValue && value.properties[5].displayValue == null) {
                     viewer1.setThemingColor(value.dbId, new THREE.Vector4(1, 0, 0, 1));
                     noIssue = false
@@ -235,7 +254,7 @@ async function getHistoricoFormas(data) {
                 }
                 //se tiver data manutenção maior que  data defito
                 //Cor verde
-                else if (value.properties[4].displayValue < value.properties[5].displayValue) {
+                else if (value.properties[4].displayValue <= value.properties[5].displayValue) {
                     viewer1.setThemingColor(value.dbId, new THREE.Vector4(0, 1, 0, 1));
                     noIssue = false
                 }
@@ -258,10 +277,10 @@ async function getHistoricoFormas(data) {
     return data;
 }
 
-function getHistoricoDefeitosFormasFirebase(rfid) {
+function getHistoricoDefeitosFormasFirebase(rfid, data) {
     return new Promise(resolve => {
         if (rfid) {
-            firebase.database().ref('formas/' + rfid + '/historico/defeitos').orderByKey().limitToLast(1).once('value').then(snapshot => {
+            firebase.database().ref('formas/' + rfid + '/historico/defeitos').orderByKey().endAt(data).limitToLast(1).once('value').then(snapshot => {
                 var objDefeito = snapshot.val(); //objeto com as informações do defeito
                 if (objDefeito) {
 
@@ -286,13 +305,9 @@ function getHistoricoManutencaoFormasFirebase(rfid, data) {
             firebase.database().ref('formas/' + rfid + '/historico/manutencao').orderByKey().endAt(data).limitToLast(1).once('value').then(snapshot => {
                 var objManutencao = snapshot.val(); //objeto com as informações do manutenção
                 if (objManutencao) {
-
                     let data = Object.keys(objManutencao); //indice do vetor de objeto
-                    if (data) {
-                        resolve(data);
-                    } else {
-                        resolve(null);
-                    }
+                    resolve(data ? data : null);
+
                 } else {
                     resolve(null)
                 }

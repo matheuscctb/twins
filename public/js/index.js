@@ -134,16 +134,20 @@ function showViewer() {
 
                 firebase.database().ref('obras/' + obra + '/sequenciareal/' + bloco).once('value').then(snapshot => {
                     let identificacao = ""
-
+                    console.log('alteração aqui 137')
                     snapshot.forEach(function(pavimento) {
                         pavimento.forEach((meiopavimento) => {
                             //Identifica se os meio pavimento em construção
                             if (parseInt(pavimento.key.substr(1), 10) >= 10) {
                                 identificacao = pavimento.key + meiopavimento.key
+                                    //P10MPCE
                             } else {
                                 identificacao = pavimento.key.substr(0, 1) + pavimento.key.substr(2) + meiopavimento.key
+                                    //P1MPSE
+
                             }
                             vetorBlocos.push(identificacao)
+                                //[P1MPCE,P1MPSE,P2...,P5MPSE]
                         })
 
 
@@ -229,19 +233,13 @@ function showViewer() {
     }
 }
 
-
-
-
-/////////////////
-
-
-
 $('#obras').on('change', function() {
     var obra = $('#obras').val();
     $("#bloco").empty();
     $('[apagar="inteiro"]').html(`<div class="col-lg-12" id="forgeViewer1"></div>`)
     $('[apagar="real"]').html(`<div class="col-lg-12" id="forgeViewer"></div>`)
     firebase.database().ref('obras/' + obra).on('value', function(snapshot) {
+        console.log('alteração aqui 242')
         if (snapshot.child('sequenciareal').val()) {
             snapshot.child('sequenciareal').forEach(function(bloco) {
                 $('#bloco').append(`<option value="${bloco.key}">${bloco.key}</option>`)
@@ -279,12 +277,17 @@ $('#inteiro-tab').on('click', function() {
 })
 
 $('#bloco').on('change', function() {
-  $('[apagar="real"]').html(`<div class="col-lg-12" id="forgeViewer"></div>`)
+    $('[apagar="real"]').html(`<div class="col-lg-12" id="forgeViewer"></div>`)
     showViewer()
 })
 
 
 firebase.database().ref('obras/').on('value', function(snapshot) {
+    var config = { obra: "", bloco: "" }
+    if ($('#obras').val() && $('#bloco').val()) {
+        config.obra = $('#obras').val()
+        config.bloco = $('#bloco').val()
+    }
 
     $('#obras').html('');
     snapshot.forEach((obra) => {
@@ -300,5 +303,10 @@ firebase.database().ref('obras/').on('value', function(snapshot) {
             //$('[apagar="real"]').html(`<div class="col-lg-12" id="forgeViewer"><img src="./img/erromodelo.jpg" alt="Erro Modelo" class="col-lg-12 shadow" ></div>`)
     }
     showViewer()
+
+    if (config.obra && config.bloco) {
+        $('#obras').val(config.obra)
+        $('#bloco').val(config.bloco)
+    }
 
 })
