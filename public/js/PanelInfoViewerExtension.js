@@ -54,44 +54,44 @@ class PanelInfoViewerExtension extends Autodesk.Viewing.Extension {
 
 
             var content = document.createElement('div');
-            mypanel = new SimplePanel(actualViewer.container, 'mypanel-'+actualViewer.clientContainer.id, 'Dashboard', content, 20, 20);
+            mypanel = new SimplePanel(actualViewer.container, 'mypanel-' + actualViewer.clientContainer.id, 'Dashboard', content, 20, 20);
             mypanel.setVisible(true);
             this._button.addClass('active');
-            $('.docking-panel-close').on('click touchstart',function(){
-                
-              $('#mypanel-'+actualViewer.clientContainer.id).hide()
+            $('.docking-panel-close').on('click touchstart', function() {
+
+                $('#mypanel-' + actualViewer.clientContainer.id).hide()
             })
 
-            actualViewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, function selectionChangedShowNewPanel(){
-            if (mypanel != null) {
-                //NOP_VIEWER.container.removeChild( mypanel.container );
-                mypanel.uninitialize();
-                mypanel = null;
+            actualViewer.addEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, function selectionChangedShowNewPanel() {
+                if (mypanel != null) {
+                    //NOP_VIEWER.container.removeChild( mypanel.container );
+                    mypanel.uninitialize();
+                    mypanel = null;
 
-            }
-            var actualViewer
-            var tipo = document.querySelector('[aria-selected="true"]').textContent;
-            if (tipo == "Tempo Real") {
-                actualViewer = viewer
+                }
+                var actualViewer
+                var tipo = document.querySelector('[aria-selected="true"]').textContent;
+                if (tipo == "Tempo Real") {
+                    actualViewer = viewer
 
-            } else {
-                actualViewer = viewer1
-            }
+                } else {
+                    actualViewer = viewer1
+                }
 
 
 
-            var content = document.createElement('div');
-            mypanel = new SimplePanel(actualViewer.container, 'mypanel-'+actualViewer.clientContainer.id, 'Dashboard', content, 20, 20);
-            mypanel.setVisible(true);
+                var content = document.createElement('div');
+                mypanel = new SimplePanel(actualViewer.container, 'mypanel-' + actualViewer.clientContainer.id, 'Dashboard', content, 20, 20);
+                mypanel.setVisible(true);
 
-            $('.docking-panel-close').on('click touchstart',function(){
-                
-              $('#mypanel-'+actualViewer.clientContainer.id).hide()
-              actualViewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, selectionChangedShowNewPanel);
-            })
+                $('.docking-panel-close').on('click touchstart', function() {
 
-        
-        
+                    $('#mypanel-' + actualViewer.clientContainer.id).hide()
+                    actualViewer.removeEventListener(Autodesk.Viewing.SELECTION_CHANGED_EVENT, selectionChangedShowNewPanel);
+                })
+
+
+
             });
 
         };
@@ -132,7 +132,7 @@ SimplePanel.prototype.initialize = function() {
     this.container.appendChild(this.content);
     this.initializeMoveHandlers(this.container);
 
-    
+
     this.closer = this.createCloseButton();
     this.container.appendChild(this.closer);
 
@@ -236,8 +236,9 @@ SimplePanel.prototype.initialize = function() {
                             `<tr><td>Progresso</td><td><div class="progress">  <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: ${progress}%;" aria-valuenow="${progress}" aria-valuemin="0" aria-valuemax="100">${progress}%</div></div></td></tr>`,
                             '<tr><td>ID</td><td>' + selection + '</td></tr>',
                             '<tr><td>Agrupamento</td><td>' + agrupamento + '</td></tr>',
-                            '<tr><td>Nº RFID</td><td>' + numRfid + '</td></tr>',
+                            '<tr><td>Nº RFID</td><td>' + (numRfid.substr(0, 3) == "000" ? numRfid.substr(10) : numRfid) + '</td></tr>',
                             '<tr><td>Largura</td><td>' + caracteristicas.largura + '</td></tr>',
+                            '<tr><td>Altura</td><td>' + caracteristicas.altura + '</td></tr>',
                             '<tr><td>Espessura</td><td>' + caracteristicas.espessura + '</td></tr>',
                             '<tr><td>Peso</td><td>' + caracteristicas.peso + '</td></tr>',
                             '<tr><td>Ultimo Registro de Defeito</td><td>' + caracteristicas.dataUltimoDefeito + '</td></tr>',
