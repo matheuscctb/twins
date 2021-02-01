@@ -38,7 +38,7 @@ function showViewer() {
             });
             viewer.start();
 
-            var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotc25yL1NOUl9IQUJfRklYXzAyXzIwMTlfUjEucnZ0';
+            var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotc25yL1NOUl9IQUJfRklYXzAyXzIwMTlfUjIucnZ0';
 
             //var documentId = 'urn:' + urn;
             Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
@@ -52,7 +52,7 @@ function showViewer() {
 
                 viewer1.start()
 
-                var documentId1 = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotc25yL1NOUl9IQUJfRklYXzAyXzIwMTlfUjEucnZ0';
+                var documentId1 = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6d2djaWloemhodW11Z2J6Z29jc2dhaXZ0ZWpjbXZldHotc25yL1NOUl9IQUJfRklYXzAyXzIwMTlfUjIucnZ0';
 
                 Autodesk.Viewing.Document.load(documentId1, onDocumentLoadSuccess1, onDocumentLoadFailure1);
             }, 300);
