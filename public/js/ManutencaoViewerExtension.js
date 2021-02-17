@@ -254,7 +254,7 @@ async function getHistoricoFormas(data) {
                 }
                 //se tiver data manutenção maior que  data defito
                 //Cor verde
-                else if (value.properties[4].displayValue <= value.properties[5].displayValue) {
+                else if (value.properties[4].displayValue < value.properties[5].displayValue) {
                     viewer1.setThemingColor(value.dbId, new THREE.Vector4(0, 1, 0, 1));
                     noIssue = false
                 }
