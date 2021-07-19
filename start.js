@@ -25,7 +25,7 @@ var firebase = require("firebase/app");
 // Add the Firebase products that you want to use
 require("firebase/auth");
 require("firebase/firestore");
-const PORT = process.env.PORT || 8000;
+const PORT = process.env.PORT || 3000;
 const config = require('./config');
 if (config.credentials.client_id == null || config.credentials.client_secret == null) {
     console.error('Missing FORGE_CLIENT_ID or FORGE_CLIENT_SECRET env. variables.');
