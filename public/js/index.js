@@ -1,18 +1,3 @@
-// Your web app's Firebase configuration
-var firebaseConfig = {
-    apiKey: "AIzaSyCk_aoscgy9uwGQJ3OfEcBulfttjH2Mzxw",
-    authDomain: "carol-56175.firebaseapp.com",
-    databaseURL: "https://carol-56175.firebaseio.com",
-    projectId: "carol-56175",
-    storageBucket: "carol-56175.appspot.com",
-    messagingSenderId: "497363212618",
-    appId: "1:497363212618:web:39701f8718c372bcbc09b3",
-    measurementId: "G-9TE9525H3C"
-};
-// Initialize Firebase
-firebase.initializeApp(firebaseConfig);
-
-
 var viewer;
 var viewer1;
 
@@ -38,10 +23,16 @@ function showViewer() {
             });
             viewer.start();
 
-            var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6eW9jaXhnd2RjbnB2b2dham5nZDNkZjhleXRjZHJ6eGEtcmVzZXJ2YXNfZG9fcGljdWFpYS9TTlJfSEFCX0ZJWF8wMl8yMDE5X1IyLnJ2dA==';
+            firebase.database().ref(`obras/${$('#obras').val()}/urn`).on('value', function(snapshot) {
 
-            //var documentId = 'urn:' + urn;
-            Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+                var urn = snapshot.val();
+
+                /* var documentId = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6eW9jaXhnd2RjbnB2b2dham5nZDNkZjhleXRjZHJ6eGEtcmVzZXJ2YXNfZG9fcGljdWFpYS9TTlJfSEFCX0ZJWF8wMl8yMDE5X1IyLnJ2dA=='; */
+
+                var documentId = 'urn:' + urn;
+                Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+
+            });
         } else {
             setTimeout(function() {
                 viewer1 = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer1'), {
@@ -52,23 +43,26 @@ function showViewer() {
 
                 viewer1.start()
 
-                var documentId1 = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6eW9jaXhnd2RjbnB2b2dham5nZDNkZjhleXRjZHJ6eGEtcmVzZXJ2YXNfZG9fcGljdWFpYS9TTlJfSEFCX0ZJWF8wMl8yMDE5X1IyLnJ2dA==';
+                firebase.database().ref(`obras/${$('#obras').val()}/urn`).on('value', function(snapshot) {
 
-                Autodesk.Viewing.Document.load(documentId1, onDocumentLoadSuccess1, onDocumentLoadFailure1);
+                    var urn = snapshot.val();
+                    var documentId1 = 'urn:' + urn;
+                    /* var documentId1 = 'urn:dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6eW9jaXhnd2RjbnB2b2dham5nZDNkZjhleXRjZHJ6eGEtcmVzZXJ2YXNfZG9fcGljdWFpYS9TTlJfSEFCX0ZJWF8wMl8yMDE5X1IyLnJ2dA=='; */
+
+                    Autodesk.Viewing.Document.load(documentId1, onDocumentLoadSuccess1, onDocumentLoadFailure1);
+
+                });
+
+
             }, 300);
 
         }
 
-
-
-
-
-
-
     });
 
     function onDocumentLoadSuccess1(doc) {
-        // if a viewableId was specified, load that view, otherwise the default view
+        $('#cardMsgForgeViewer').hide()
+            // if a viewableId was specified, load that view, otherwise the default view
         var viewables1 = doc.getRoot().getDefaultGeometry();
         viewer1.loadDocumentNode(doc, viewables1).then(i => {
             // any additional action here?
@@ -76,6 +70,7 @@ function showViewer() {
     }
 
     function onDocumentLoadFailure1(viewerErrorCode) {
+        $('#cardMsgForgeViewer').show()
         console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
     }
 
@@ -86,6 +81,8 @@ function showViewer() {
     } */
 
     function onDocumentLoadSuccess(doc) {
+        $('#cardMsgForgeViewer').hide()
+
         var viewables = doc.getRoot().getDefaultGeometry();
         viewer.loadDocumentNode(doc, viewables).then(i => {
             // documented loaded, any action?
@@ -217,6 +214,7 @@ function showViewer() {
     }
 
     function onDocumentLoadFailure(viewerErrorCode) {
+        $('#cardMsgForgeViewer').show()
         console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
     }
 

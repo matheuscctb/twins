@@ -24,6 +24,7 @@
 
 
 
+
 </head>
 
 <body class="sb-nav-fixed">
@@ -43,10 +44,10 @@
                             <div class="sb-nav-link-icon"><i class="fas fa-dot-circle"></i></div>
                             Início
                         </a>
-                        <!--a class="nav-link" href="">
+                        <a class="nav-link" href="cadastro_modelo.html">
                             <div class="sb-nav-link-icon"><i class="fas fa-dot-circle"></i></div>
                             Cadastrar Modelo
-                        </a-->
+                        </a>
 
                         <div class="sb-sidenav-menu-heading">Selecionar obra</div>
                         <select id="obras" class="form-control"></select>
@@ -64,6 +65,18 @@
             <main>
                 <div class="container">
                     <div class="main-heading border-bottom">minha obra</div>
+                    <div class="card bg-warning text-white mt-10" id="cardMsgForgeViewer">
+                        <div class="card-body pl-3 pr-3 pt-2 pb-2">
+
+                            <div class="row no-gutters align-items-center">
+                                <div class="col-auto">
+                                    <i class="fas fa-warning fa-2x text-gray-300 "></i>
+                                </div>
+                                <div id="msgForgeViewer" class="text-white text-uppercase mb-1 h10 pl-4"><a href="cadastro_modelo.html" class="w3-bar-item w3-button w3-padding text-white">Clique aqui para cadastrar um modelo</a></div>
+
+                            </div>
+                        </div>
+                    </div>
 
                     <ul id="myTab2" role="tablist" class="nav nav-tabs nav-pills with-arrow lined row text-center">
                         <li class="nav-item col">
@@ -111,21 +124,11 @@
     <script src="js/PanelInfoViewerExtension.js"></script>
     <script src="js/ManutencaoViewerExtension.js"></script>
     <script src="js/NestedViewerExtension.js"></script>
-
-
+    <script src="js/firebaseConfig.js"></script>
 
     <script src="js/scripts.js"></script>
 
-
-
-
     <script src="./js/index.js"></script>
-
-
-
-
-
-
 
 </body>
 

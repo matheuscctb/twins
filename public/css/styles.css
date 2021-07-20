@@ -10688,9 +10688,6 @@ img {
     color: darkgray;
 }
 
-
-/* @media (max-width: 576px) {
-    #btn-close1 {
-        display: block !important;
-    }
-} */
+#cardMsgForgeViewer {
+    display: none;
+}

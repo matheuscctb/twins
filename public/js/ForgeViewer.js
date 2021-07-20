@@ -23,18 +23,18 @@ function launchViewer(urn) {
         env: 'AutodeskProduction',
         getAccessToken: getForgeToken
     };
-    
+
 
     Autodesk.Viewing.Initializer(options, () => {
-        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {extensions: ['PanelInfoViewerExtension',]});
+        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['PanelInfoViewerExtension', ] });
         viewer.start();
 
-        console.log('urn: ',urn)
+        console.log('urn: ', urn)
         var documentId = 'urn:' + urn;
         this.urn1 = urn;
 
-        
-       /*  firebase.database().ref(`obras/${obraAtual}`).on('value', function(snapshot) {
+
+        /*  firebase.database().ref(`obras/${obraAtual}`).on('value', function(snapshot) {
             
 
         })
@@ -47,7 +47,7 @@ function onDocumentLoadSuccess(doc) {
     var viewables = doc.getRoot().getDefaultGeometry();
     viewer.loadDocumentNode(doc, viewables).then(i => {
         // documented loaded, any action?
-        $("#btn-salvar").removeAttr('disabled'); 
+        $("#btn-salvar").removeAttr('disabled');
 
     });
 
@@ -66,7 +66,7 @@ function getForgeToken(callback) {
     });
 }
 
-function salvarUrn(){
+function salvarUrn() {
     node = $('#appBuckets').jstree(true).get_selected(true)[0];
     var urn = node.id;
     var obraAtual = $('#obrasBucket').val()
@@ -76,11 +76,11 @@ function salvarUrn(){
         updates[`/obras/${obraAtual}/urn`] = urn;
 
         firebase.database().ref().update(updates)
-        window.location.href = "home.html ";
-    }
-    else{
+        window.location.href = "index.html ";
+    } else {
         alert('Selecione uma obra')
-    }}
+    }
+}
 
 
 $("#btn-salvar").on('click', function() {
@@ -93,4 +93,3 @@ firebase.database().ref('obras/').on('value', function(snapshot) {
         $('#obrasBucket').append(`<option value="${obra.key}">${obra.key.toUpperCase()}</option>`)
     });
 });
-
