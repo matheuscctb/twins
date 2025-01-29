@@ -1,4 +1,4 @@
-﻿/////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 // Copyright (c) Autodesk, Inc. All rights reserved
 // Written by Forge Partner Development
 //
@@ -40,8 +40,17 @@ function launchViewer(urn) {
         })
  */
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
-    });
-}
+
+        if (startedCode > 0) {
+            console.error('Failed to create a Viewer: WebGL not supported.');
+            return;
+        }
+    
+        console.log('Initialization complete, loading a model next...');
+    
+    })
+    };
+
 
 function onDocumentLoadSuccess(doc) {
     var viewables = doc.getRoot().getDefaultGeometry();
@@ -58,6 +67,7 @@ function onDocumentLoadFailure(viewerErrorCode) {
     console.error('onDocumentLoadFailure() - errorCode:' + viewerErrorCode);
 }
 
+//Talvez aqui
 function getForgeToken(callback) {
     fetch('/api/forge/oauth/token').then(res => {
         res.json().then(data => {

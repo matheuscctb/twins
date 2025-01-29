@@ -16,9 +16,13 @@
 // UNINTERRUPTED OR ERROR FREE.
 /////////////////////////////////////////////////////////////////////
 
-const { AuthClientTwoLegged } = require('forge-apis');
 
+
+
+const { AuthClientTwoLegged } = require('forge-apis');
 const config = require('../../config');
+const axios = require('axios');
+const qs = require('qs');
 
 /**
  * Initializes a Forge client for 2-legged authentication.
@@ -48,7 +52,33 @@ async function getToken(scopes) {
  * @returns Token object: { "access_token": "...", "expires_at": "...", "expires_in": "...", "token_type": "..." }.
  */
 async function getPublicToken() {
-    return getToken(config.scopes.public);
+    const clientId = config.credentials.client_id;
+    const clientSecret = config.credentials.client_secret;
+    const authString = Buffer.from(`${clientId}:${clientSecret}`).toString('base64');
+    const tokenUrl = 'https://developer.api.autodesk.com/authentication/v2/token'; // olho aqui
+
+    const data = qs.stringify({
+        grant_type: 'client_credentials',
+        scope: 'data:read'
+    });
+
+    const axiosConfig = {
+        method: 'post',
+        url: tokenUrl,
+        headers: {
+            'Authorization': `Basic ${authString}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        data: data
+    };
+
+    try {
+        const response = await axios(axiosConfig);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching public token', error);
+        throw error;
+    }
 }
 
 /**

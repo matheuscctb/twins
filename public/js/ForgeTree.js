@@ -24,7 +24,7 @@ $(document).ready(function () {
           formData.append('bucketKey', node.id);
   
           $.ajax({
-            url: '/api/forge/oss/objects',
+            url: '/api/oss/v2/buckets',//
             data: formData,
             processData: false,
             contentType: false,
@@ -42,7 +42,7 @@ $(document).ready(function () {
   function createNewBucket() {
     var bucketKey = $('#newBucketKey').val();
     jQuery.post({
-      url: '/api/forge/oss/buckets',
+      url: '/api/oss/v2/buckets',//
       contentType: 'application/json',
       data: JSON.stringify({ 'bucketKey': bucketKey }),
       success: function (res) {
@@ -62,7 +62,7 @@ $(document).ready(function () {
       'core': {
         'themes': { "icons": true },
         'data': {
-          "url": '/api/forge/oss/buckets',
+          "url": '/api/oss/v2/buckets',
           "dataType": "json",
           'multiple': false,
           "data": function (node) {
