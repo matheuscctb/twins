@@ -26,7 +26,7 @@ export const apiForge:apiForgeInterface = () => ({
                 'scope': 'code:all data:write data:read bucket:create bucket:delete bucket:read',
             };
             
-            const formBodyArray = [];
+            const formBodyArray: string[] = [];
             for (const property  in details) {
               const encodedKey = encodeURIComponent(property);
               const encodedValue = encodeURIComponent(details[property as 'grant_type' | 'scope']);
@@ -34,8 +34,8 @@ export const apiForge:apiForgeInterface = () => ({
             }
             const formBodyContent = formBodyArray.join("&");
 
-            const clientId = import.meta.env.VITE_APP_FORGE_CLIENT_ID as string;
-            const clientSecret = import.meta.env.VITE_APP_FORGE_CLIENT_SECRET as string;
+            const clientId = "oCIxgWDcNpVoGAJNGd3dF8EyTCDrZXA";
+            const clientSecret = "GMjLrenKIE2AUAGx";
             const authToken = `Basic ${btoa(`${clientId}:${clientSecret}`)}`;
 
             const fetchResponse: Response = await fetch("https://developer.api.autodesk.com/authentication/v2/token", {
